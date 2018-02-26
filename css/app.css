@@ -114,6 +114,9 @@ div.with_background {
     background-color: floralwhite !important;
     color: #000 !important; /*texto negro ya que cambia a blanco*/
 }
+.ui-flipswitch-active{
+  background-color: rgb(250, 250, 210)!important;
+}
 .m-popup>div.m-content>div.m-body>div.m-geojson-content>div.result>table td.key {
   text-align: left !important;
 }

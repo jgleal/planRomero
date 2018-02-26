@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="format-detection" content="telephone=no" />
-<meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="default-src * gap:; img-src * data: blob: filesystem:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src * gap:; img-src * data: blob: filesystem:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
 
   <link href="lib/jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
   <link href="lib/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
@@ -12,18 +13,19 @@
   <script type="text/javascript" src="cordova.js"></script>
   <script src="lib/jquery/jquery-1.12.1.min.js"></script>
   <script>
-    $(document).on('mobileinit',function(){
-  	  $.mobile.changePage.defaults.changeHash = false;
-  	  $.mobile.hashListeningEnabled = false;
-  	  $.mobile.pushStateEnabled = false;
-	  });
+    $(document).on('mobileinit', function () {
+      $.mobile.changePage.defaults.changeHash = false;
+      $.mobile.hashListeningEnabled = false;
+      $.mobile.pushStateEnabled = false;
+    });
   </script>
   <script src="lib/jquery/jquery.mobile-1.4.5.min.js"></script>
   <script src="lib/mapea/js/mapea.ol.min.js "></script>
   <script src="lib/browser-polyfill.js" type="text/javascript"></script>
   <script src="lib/mapea/js/configuration.js "></script>
-  <script src="js/app.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+
 
 
   <title>Plan Romero 2017</title>
@@ -40,6 +42,9 @@
     <div role="main" class="ui-content with_background">
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">Hermandades</li>
+        <li data-icon="info">
+          <a href="#hermandad">Datos de hermandad</a>
+        </li>
         <li data-icon="navigation">
           <a href="#ruta">Rutas de Carretas</a>
         </li>
@@ -54,55 +59,92 @@
       <a class="ui-btn ui-icon-clock ui-btn-icon-right" href="#horas">Paso de hermandades</a>
     </div>
   </div>
+  <!-- Page: hermandad  -->
+  <div id="hermandad" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Hermandad</h3>
+      <div data-role="navbar">
+        <ul>
+          <li>
+            <select id="dropHermandad" name="dropHermandad" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div role="main" class="ui-content with_background">
+      <!-- CONTENIDO -->
+      <div class="ui-field-contain">
+        <label for="flipChkFavorita">Marcar hermandad como favorita:</label>
+        <input type="checkbox" data-role="flipswitch" name="flipChkFavorita" id="flipChkFavorita">
+      </div>
+    </div>
+    <!--content-->
+  </div>
+  <!--fin camino-->
   <!-- Page: ruta  -->
   <div id="ruta" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
       <h1>Rutas de Carretas</h1>
       <div data-role="navbar">
         <ul>
 
-          <li><select id="dropHermandadRuta" name="dropHermandadRuta" data-shadow="false" data-mini="true" data-corners="false">
-          </select>       </li>
-          <li><select id="dropDiaRuta" name="dropDiaRuta" data-shadow="false" data-mini="true" data-corners="false">
-          </select></li>
+          <li>
+            <select id="dropHermandadRuta" name="dropHermandadRuta" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+          <li>
+            <select id="dropDiaRuta" name="dropDiaRuta" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
 
         </ul>
-      </div><!-- /navbar -->
+      </div>
+      <!-- /navbar -->
     </div>
 
 
     <div role="main" class="ui-content">
       <div id="mapRuta"></div>
-    </div> <!--content-->
+    </div>
+    <!--content-->
 
-  </div><!-- fin ruta-->
-    <!-- Page: camino  -->
-    <div id="camino" data-role="page">
-      <div data-role="header" data-position="fixed">
-        <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
-        <h3>Camino</h3>
-        <div data-role="navbar">
-          <ul>
-            <li>
-              <select id="dropHermandadCamino" name="dropHermandadCamino" data-shadow="false" data-mini="true" data-corners="false">
-              </select>
-            </li>
-          </ul>
-        </div>
+  </div>
+  <!-- fin ruta-->
+  <!-- Page: camino  -->
+  <div id="camino" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Camino</h3>
+      <div data-role="navbar">
+        <ul>
+          <li>
+            <select id="dropHermandadCamino" name="dropHermandadCamino" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+        </ul>
       </div>
-      <div role="main" class="ui-content with_background">
-        <div data-role="collapsibleset" data-collapsed-icon="plus" data-expanded-icon="minus"
-        data-inset="true" data-corners="false" id="listCamino">
+    </div>
+    <div role="main" class="ui-content with_background">
+      <div data-role="collapsibleset" data-collapsed-icon="plus" data-expanded-icon="minus" data-inset="true" data-corners="false"
+        id="listCamino">
       </div>
       <div id="msjCamino" class="noinfo">
       </div>
-    </div><!--content-->
-  </div><!--fin camino-->
+    </div>
+    <!--content-->
+  </div>
+  <!--fin camino-->
   <!-- Page: gps  -->
   <div id="gps" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
       <h3>Localización GPS</h3>
       <div data-role="navbar">
         <ul>
@@ -117,11 +159,13 @@
     <div role="main" class="ui-content">
       <div id="mapGPS"></div>
     </div>
-  </div><!--fin gps-->
+  </div>
+  <!--fin gps-->
   <!-- Page: diario  -->
   <div id="diario" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
       <h3>Movimiento diario</h3>
       <div data-role="navbar">
         <ul>
@@ -135,26 +179,31 @@
     <div role="main" class="ui-content with_background">
 
 
-     <ul data-role="listview" data-inset="true" data-corners="false" id="listDiario">
+      <ul data-role="listview" data-inset="true" data-corners="false" id="listDiario">
 
-     </ul>
-   </div><!--content-->
- </div><!--fin diario-->
- <!-- Page: mapadiario  -->
- <div id="mapaDiario" data-role="page">
-   <div data-role="header" data-position="fixed">
-     <a href="#diario" class="ui-btn-back ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
-     <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a> <!--ui-corner-all-->
-     <h1>Movimiento diario</h1>
-     <p class="subheader"></p>
-   </div>
+      </ul>
+    </div>
+    <!--content-->
+  </div>
+  <!--fin diario-->
+  <!-- Page: mapadiario  -->
+  <div id="mapaDiario" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#diario" class="ui-btn-back ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h1>Movimiento diario</h1>
+      <p class="subheader"></p>
+    </div>
 
 
-   <div role="main" class="ui-content">
-     <div id="mapDiario"></div>
-   </div> <!--content-->
+    <div role="main" class="ui-content">
+      <div id="mapDiario"></div>
+    </div>
+    <!--content-->
 
-  <!-- <div data-role="footer" data-position="fixed">
+    <!-- <div data-role="footer" data-position="fixed">
      <div data-role="tabs" id="tabs">
        <div data-role="navbar">
          <ul>
@@ -167,47 +216,55 @@
      </div>
 	 </div>-->
 
- </div><!-- fin mapadiario-->
- <!-- Page: horas  -->
- <div id="horas" data-role="page">
-  <div data-role="header" data-position="fixed">
-    <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
-    <h3>Horas de paso</h3>
-    <div data-role="navbar">
-      <ul>
-        <li>
-          <select id="dropPasos" name="dropPasos" data-shadow="false" data-mini="true" data-corners="false">
-          </select>
-        </li>
-        <li>
-          <select id="dropDiasPaso" name="dropDiasPaso" data-shadow="false" data-mini="true" data-corners="false">
-          </select>
-        </li>
-      </ul>
-    </div>
   </div>
+  <!-- fin mapadiario-->
+  <!-- Page: horas  -->
+  <div id="horas" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Horas de paso</h3>
+      <div data-role="navbar">
+        <ul>
+          <li>
+            <select id="dropPasos" name="dropPasos" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+          <li>
+            <select id="dropDiasPaso" name="dropDiasPaso" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-<div role="main" class="ui-content with_background">
+    <div role="main" class="ui-content with_background">
 
-	<ul data-role="listview" data-inset="true" data-corners="false" id="listHoras">
-	</ul>
+      <ul data-role="listview" data-inset="true" data-corners="false" id="listHoras">
+      </ul>
 
-</div><!--content-->
-</div><!--fin horas-->
-<!-- Page: diario  -->
-<div id="toponimo" data-role="page">
-  <div data-role="header" data-position="fixed">
-    <a href="#camino" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a> <!--ui-corner-all-->
-    <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a> <!--ui-corner-all-->
-    <h3></h3>
-    <p class="subheader"</p>
+    </div>
+    <!--content-->
+  </div>
+  <!--fin horas-->
+  <!-- Page: diario  -->
+  <div id="toponimo" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#camino" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3></h3>
+      <p class="subheader" </p>
     </div>
     <div role="main" class="ui-content">
       <div id="mapToponimo" class="m-mapea-container"></div>
-    </div><!--content-->
+    </div>
+    <!--content-->
 
-  </div><!--fin toponimo-->
-</div>
+  </div>
+  <!--fin toponimo-->
+  </div>
 
 </body>
 

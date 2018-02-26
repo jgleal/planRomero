@@ -1,558 +1,607 @@
 /***********variables globales********/
-var mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario;
-var geoJSONformat = new ol.format.GeoJSON();
-var vectorSourceGPS = new ol.source.Vector();
-var vectorSourceRuta = new ol.source.Vector();
-var vectorSourceDiario = new ol.source.Vector();
-var dias = null;
-var hermandades = [];
-hermandades.getByField = function (field, value){
-	for(i=0;i<this.length;i++){//forEach no interrumpe con return
-		if(this[i][field] && this[i][field]!=null
-			&& this[i][field].toString().toUpperCase()===value.toString().toUpperCase()) return this[i];
+let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario;
+let dias = null;
+let hermandades = [];
+hermandades.getByField = function (field, value) {
+	for (let i = 0; i < this.length; i++) { //forEach no interrumpe con return
+		if (this[i][field] && this[i][field] != null &&
+			this[i][field].toString().toUpperCase() ===
+			value.toString().toUpperCase()) return this[i];
 	}
 	return null;
 };
-hermandades.add = function (h){
-	this.push.apply(this,h);
+hermandades.add = function (h) {
+	this.push.apply(this, h);
 };
+let lyGPS = new M.layer.GeoJSON({
+	name: 'GPS'
+}, {
+	style: new M.style.Point({
+		radius: 5,
+		fill: {
+			color: function (feature) {
+				let h = hermandades.getByField('etiqueta_gps', feature.getAttribute('name'));
+				if (h != null) {
+					h.lastPos = feature.getGeometry().coordinates;
+					return h.color;
+				} else {
+					return "#000";
+				}
+			},
+			opacity: 0.5
+		},
+		stroke: {
+			color: '#FF0000'
+		},
+		label: {
+			text: function (feature) {
+				return feature.getAttribute('name') + "\n\r" +
+					formatDate(new Date(feature.getAttribute('ts')),"gps");
+			},
+			font: 'bold 9px arial',
+			offsetY: -18,
+			fill: {
+				color: "#000"
+			},
+			stroke: {
+				color: "#ffffff",
+				width: 3
+			}
+		}
+	})
+});
+let lyRuta = new M.layer.GeoJSON({
+	name: "Ruta"
+}, {
+	style: new M.style.Line({
+		stroke: {
+			color: '{{color}}',
+			width: 5
+		}
+	}),
+	hide: attrNotShow
+});
+let lyPois = new M.layer.GeoJSON({
+	name: 'Información'
+}, {
+	style: poiStyle,
+	hide: attrNotShow
+});
 /*************************************/
 
-function getInfo(url,filtro,showLoading){
-	showLoading = showLoading !== undefined? showLoading : true;
+function getInfo(url, filtro = {}, showLoading = true) {
 	showLoading && $.mobile.loading().show();
-	if (filtro===undefined) filtro={};
-	filtro.apikey=apikey;
+	filtro.apikey = apikey;
 	return $.ajax({
 		dataType: "jsonp",
 		url: url,
-		timeout: timeout*1000,
+		timeout: timeout * 1000,
 		data: filtro
-	}).then(function(data, textStatus, jqXHR) {
-		if (data.error){
-			data.peticion=$(this)[0].url;
+	}).then(function (data, textStatus, jqXHR) {
+		if (data.error) {
+			data.peticion = $(this)[0].url;
 			return $.Deferred().reject(data);
-		}else{
+		} else {
 			return data;
 		}
-	}).fail(function(e){
+	}).fail(function (e) {
 		//Captura de error genérica para todas las llamadas
 		//console.error(e.peticion, e.error);
-		if (e.statusText){ //ES UN ERROR NO CONTROLADO
-			showDialog(errInesperado,'ERROR INESPERADO','error');
+		if (e.statusText) { //ES UN ERROR NO CONTROLADO
+			showDialog(errInesperado, 'ERROR INESPERADO', 'error');
 		}
-	}).always(function(){
+	}).always(function () {
 		$.mobile.loading().hide();
 	});
 }
-function cargarHermandades(){
-	return getInfo(getHermandades).done(function(data){
+
+function cargarHermandades() {
+	return getInfo(getHermandades).done(function (data) {
 		hermandades.add(data.hermandades);
-		$.each(hermandades,function(i,hermandad){
-			option = $("<option value=" + hermandad.codigo_hermandad + ">" + hermandad.nombre + "</option>");
+		$.each(hermandades, function (i, hermandad) {
+			let option = $("<option value=" + hermandad.codigo_hermandad + ">" + hermandad.nombre + "</option>");
+			let hFav = localStorage.getItem("hermandadFavorita");
+			if (hFav == hermandad.codigo_hermandad) {
+				option.attr('selected', 'selected');
+				informacionHermandad(hFav);
+			}
 			$("#dropHermandadCamino").append(option);
-			if(hermandad.gps){$("#dropHermandadGps").append(option.clone());}
+			$("#dropHermandad").append(option.clone());
+			if (hermandad.gps) {
+				$("#dropHermandadGps").append(option.clone());
+			}
 		});
 		cargarCamino($("#dropHermandadCamino").val());
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function cargarHermandadesRuta(){
-	return getInfo(getHermandades,{"ruta":true}).done(function(data){
-		$.each(data.hermandades,function(i,hermandad){
-			option = $("<option value=" + hermandad.codigo_hermandad + ">" + hermandad.nombre + "</option>");
+
+function cargarHermandadesRuta() {
+	return getInfo(getHermandades, {
+		"ruta": true
+	}).done(function (data) {
+		$.each(data.hermandades, function (i, hermandad) {
+			let option = $("<option value=" + hermandad.codigo_hermandad + ">" + hermandad.nombre + "</option>");
+			let hFav = localStorage.getItem("hermandadFavorita");
+			if (hFav == hermandad.codigo_hermandad) {
+				option.attr('selected', 'selected');
+			}
 			$("#dropHermandadRuta").append(option);
 		});
 		cargarFechasHermandad($("#dropHermandadRuta").val());
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);;
+	});
 }
-function cargarPasos(){
-	return getInfo(getPasos).done(function(data){
+
+function cargarPasos() {
+	return getInfo(getPasos).done(function (data) {
 		pasos = data.pasos;
-		$.each(pasos,function(i,paso){
+		$.each(pasos, function (i, paso) {
 			option = $("<option value=" + paso.codigo_toponimo + ">" + paso.nombre_toponimo + "</option>");
 			$("#dropPasos").append(option);
 		});
-		cargarDiasPaso($("#dropPasos").val()).done(function(data){
-			cargarHoras($("#dropPasos").val(),$("#dropDiasPaso").val());
+		cargarDiasPaso($("#dropPasos").val()).done(function (data) {
+			cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val());
 		});
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);;
+	});
 }
-function cargarCamino(idHermandad){
-	listCamino = $("#listCamino");
-	return getInfo(getCamino+idHermandad).done(function(data){
+
+function informacionHermandad(idHermandad) {
+	let hFav = localStorage.getItem("hermandadFavorita");
+	$("#flipChkFavorita").prop('checked', hFav == idHermandad);
+
+	let h = hermandades.getByField('codigo_hermandad', idHermandad);
+	console.log(h);
+}
+
+function cargarCamino(idHermandad) {
+	let listCamino = $("#listCamino");
+	return getInfo(getCamino + idHermandad).done(function (data) {
 		listCamino.empty();
 		$("#msjCamino").hide();
-		$.each(data.pasos,function(i,paso){
-			ul = listCamino.find("#"+paso.codigo_fecha);
-			if (ul.length==1){
-				ul=$(ul[0]);
-			}
-			else{
-				div = $("<div data-role='collapsible'><h1>"+paso.dia_semana+"</h1></div>");
-				ul = $("<ul data-role='listview' id='"+paso.codigo_fecha+"'></ul>");
+		$.each(data.pasos, function (i, paso) {
+			let ul = listCamino.find("#" + paso.codigo_fecha);
+			if (ul.length == 1) {
+				ul = $(ul[0]);
+			} else {
+				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana + "</h1></div>");
+				ul = $("<ul data-role='listview' id='" + paso.codigo_fecha + "'></ul>");
 				div.append(ul);
 			}
-			texto_fecha = paso.texto_fecha.match(/\d{1,2}:\d{1,2}/);
-			topoNombre = texto_fecha.input.substr(0,texto_fecha.index).trim();
-			toponimo = {"topoX":paso.x,"topoY":paso.y,"topoNombre":topoNombre+" ("+texto_fecha+")","topoHermandad":$("#dropHermandadCamino option:selected").text()};
+			let texto_fecha = paso.texto_fecha.match(/\d{1,2}:\d{1,2}/);
+			let topoNombre = texto_fecha.input.substr(0, texto_fecha.index).trim();
+			let toponimo = {
+				"topoX": paso.x,
+				"topoY": paso.y,
+				"topoNombre": topoNombre + " (" + texto_fecha + ")",
+				"topoHermandad": $("#dropHermandadCamino option:selected").text()
+			};
 
-			li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\","+JSON.stringify(toponimo)+")'>"+topoNombre+"</a><p class='ui-li-aside'><strong>"+texto_fecha[0]+"</strong></p></li>");
+			let li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\"," + JSON.stringify(toponimo) + ")'>" + topoNombre + "</a><p class='ui-li-aside'><strong>" + texto_fecha[0] + "</strong></p></li>");
 			ul.append(li);
 			listCamino.append(div);
 		});
-	}).fail(function(e){
+	}).fail(function (e) {
 		listCamino.empty();
 		$("#msjCamino").html(e.error.mensaje).show();
 	});
 }
-function cargarDiario(idDia){
+
+function cargarDiario(idDia) {
 	//JGL: no puedo usar las hermandades ya consultadas poque la respuesta no tiene los días de paso.
-	return getInfo(getHermandades,{"codigo_fecha":idDia}).done(function(data){
-		listDiario = $("#listDiario");
+	return getInfo(getHermandades, {
+		"codigo_fecha": idDia
+	}).done(function (data) {
+		let listDiario = $("#listDiario");
 		listDiario.empty();
 
-		$.each(data.hermandades,function(i,hermandad){
-			gps = hermandad.nombre_largo.indexOf('(GPS)');
-			if (gps>0){
-				li = $("<li><a href='javascript:pintarMovimientoDiario("+JSON.stringify(hermandad)+","+idDia+")' class='ui-btn ui-btn-icon-right ui-icon-eye'>"+hermandad.nombre_largo.substr(0,gps).trim()+"</a></li>");
+		$.each(data.hermandades, function (i, hermandad) {
+			let gps = hermandad.nombre_largo.indexOf('(GPS)');
+			let li = $("<li>");
+			if (gps > 0) {
+				li.append($("<a href='javascript:pintarMovimientoDiario(" + JSON.stringify(hermandad) + "," + idDia + ")' class='ui-btn ui-btn-icon-right ui-icon-eye'>" + hermandad.nombre_largo.substr(0, gps).trim() + "</a>"));
 				li.append("<p class='ui-li-aside'>GPS</p>");
-			}else{
-				li = $("<li><a href='javascript:pintarMovimientoDiario("+JSON.stringify(hermandad)+","+idDia+")' class='ui-btn ui-btn-icon-right ui-icon-eye'>"+hermandad.nombre_largo+"</a></li>");
+			} else {
+				li.append($("<a href='javascript:pintarMovimientoDiario(" + JSON.stringify(hermandad) + "," + idDia + ")' class='ui-btn ui-btn-icon-right ui-icon-eye'>" + hermandad.nombre_largo + "</a>"));
 			}
 			listDiario.append(li);
 		});
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function cargarHoras(idPaso, idDia){
-	return getInfo(getHoras,{"codigo_toponimo":idPaso, "codigo_fecha":idDia}).done(function(data){
-		listHoras = $("#listHoras");
+
+function cargarHoras(idPaso, idDia) {
+	return getInfo(getHoras, {
+		"codigo_toponimo": idPaso,
+		"codigo_fecha": idDia
+	}).done(function (data) {
+		let listHoras = $("#listHoras");
 		listHoras.empty();
-		$.each(data.hora_hermandad,function(i,horaPaso){
-			li = $("<li>"+horaPaso.nombre+"</li>");
-			li.append("<p class='ui-li-aside'>"+horaPaso.hora+"</p>");
+		$.each(data.hora_hermandad, function (i, horaPaso) {
+			let li = $("<li>" + horaPaso.nombre + "</li>");
+			li.append("<p class='ui-li-aside'>" + horaPaso.hora + "</p>");
 			listHoras.append(li);
 		});
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function cargarDiasPaso(idPaso){
-	return getInfo(getFechasPaso+idPaso).done(function (data){
+
+function cargarDiasPaso(idPaso) {
+	return getInfo(getFechasPaso + idPaso).done(function (data) {
 		$("#dropDiasPaso").empty();
-		$.each(data.dias_semana_paso,function(i,dia){
-			option=$("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
+		$.each(data.dias_semana_paso, function (i, dia) {
+			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
 			$("#dropDiasPaso").append(option);
 		});
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function cargarDias(){
-	return getInfo(getDias).done(function (data){
+
+function cargarDias() {
+	return getInfo(getDias).done(function (data) {
 		dias = data.dias_semana;
-		$.each(dias,function(i,dia){
-			option=$("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
+		$.each(dias, function (i, dia) {
+			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
+			if (dia.fecha == formatDate(new Date())){
+				option.attr('selected', 'selected');
+			}
 			$("#dropDiaDiario").append(option);
 		});
 		cargarDiario($("#dropDiaDiario").val());
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function cargarFechasHermandad(idHermandad){
-	return getInfo(getDias+idHermandad).done(function (data){
+
+function cargarFechasHermandad(idHermandad) {
+	return getInfo(getDias + idHermandad).done(function (data) {
 
 		$("#dropDiaRuta").empty();
-		opCompleta=$("<option value='completa'>Completa</option>");
-		opIda=$("<option value='ida'>Ida</option>");
-		opVuelta=$("<option value='vuelta'>Vuelta</option>");
+		let opCompleta = $("<option value='completa'>Completa</option>");
+		let opIda = $("<option value='ida'>Ida</option>");
+		let opVuelta = $("<option value='vuelta'>Vuelta</option>");
 		$("#dropDiaRuta").append(opCompleta);
 
 		dias = data.dias_semana;
-
-		ida=false;
-		vuelta = false;
-		$.each(dias,function(i,dia){
-			if (dia.dia_semana.toUpperCase().indexOf('IDA')>0) ida=true;
-			if (dia.dia_semana.toUpperCase().indexOf('VUELTA')>0) vuelta=true;
-			option=$("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
+		let ida = false;
+		let vuelta = false;
+		$.each(dias, function (i, dia) {
+			if (dia.dia_semana.toUpperCase().indexOf('IDA') > 0) ida = true;
+			if (dia.dia_semana.toUpperCase().indexOf('VUELTA') > 0) vuelta = true;
+			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
+			if (dia.fecha == formatDate(new Date())){
+				option.attr('selected', 'selected');
+			}
 			$("#dropDiaRuta").append(option);
 		});
 
 		if (vuelta) $("#dropDiaRuta option:first").after(opVuelta);
 		if (ida) $("#dropDiaRuta option:first").after(opIda);
-	}).fail(function(e){showError(e.error);;});
-}
-function pintarRuta(hermandad, dia){
-	if (mapajsRuta===undefined){
-		mapajsRuta = M.map({
-			controls:["location"],
-			container:"mapRuta",
-			wmcfiles: ['romero_mapa','romero_satelite']
-		});
-		// mapajsRuta.on(M.evt.COMPLETED, function() { //M.evt.COMPLETED no está select
-		// 	window.setTimeout(function(){
-		// 		//$(".m-wmcselector-select").unbind("change");//no funciona
-		// 	  //clono y reemplazo para eliminar todos los eventos
-		// 	  var wmcSel = $(".m-wmcselector-select")[0],
-		// 				wmcSelClone = wmcSel.cloneNode(true);
-		// 	  wmcSel.parentNode.replaceChild(wmcSelClone, wmcSel);
-		// 		wmcSelClone.addEventListener('change', function(e) {
-		// 					 e.preventDefault(); //no funciona
-		// 					 var selectedWMCLayer = mapajsRuta.getWMC($(this).find("option:selected").text())[0];
-		// 	         selectedWMCLayer.select();
-		// 	  })}, 1000);
-		// });
-		lyRuta = getLayerRuta(vectorSourceRuta);
-		lyGPS = getLayerGPS();
-		mapajsRuta.getMapImpl().addLayer(lyRuta);
-		mapajsRuta.getMapImpl().addLayer(lyGPS);
-
-
-	}else{}
-
-	filtro={};
-	if ($.isNumeric(dia)) filtro.codigo_fecha =dia;
-
-	getInfo(getRutas+hermandad, filtro).done(function(data){
-		vectorSourceRuta.clear();
-
-		features = geoJSONformat.readFeatures(data);
-		if (!$.isNumeric(dia)){
-			features= $.grep(features, function(f) {
-				return (dia=='completa' || f.get('sentido') == dia);
-			});
-		}
-		if (features.length>0){
-			vectorSourceRuta.addFeatures(features);
-			//JGL: cálculo de ángulo
-			/*vectorSourceRuta.forEachFeature(function (f){
-				start = f.getGeometry().getFirstCoordinate();
-				end = f.getGeometry().getLastCoordinate();
-				angulo = Math.abs(Math.atan2(end[1] - start[1], end[0] - start[0])* 180 / Math.PI);
-				//rad = Math.atan2(end[1] - start[1], end[0] - start[0]);
-				//angulo = 270-(rad*180/Math.PI); //más preciso ¿por?
-				f.set('angulo', angulo);
-			});*/
-
-			mapajsRuta.setBbox(vectorSourceRuta.getExtent());
-		}else{
-			//JGL: no debería ocurrir
-			showDialog('El trayecto seleccionado no tiene elementos','INFORMACIÓN','warning');
-		}
-	}).fail(function(e){showError(e.error);;});
-}
-function getLayerRuta(vectorSource){
-	return new ol.layer.Vector({
-		source: vectorSource,
-		zIndex: 99999999,
-		name: 'Ruta',
-		style: function(feature, resolution){
-			return [new ol.style.Style({
-				stroke: new ol.style.Stroke({
-					color: feature.get('color'),
-					width: 5
-				})/*,
-				text: new ol.style.Text({
-					text: feature.get('codigoTramo'),
-					rotation: feature.get('angulo'), //si se usa, descomentar el cáculo
-					font: 'bold 11px arial',
-					fill: new ol.style.Fill({color: "#000"}),
-					stroke: new ol.style.Stroke({
-						color: "#ffffff",
-						width: 3
-					})
-				})*/
-
-			/*,geometry: function(feature) {
-					// return the coordinates of the first ring of the polygon
-					var coordinates = feature.getGeometry().getCoordinates()[0];
-					console.log(coordinates);
-				}*/
-			})];
-		}
+	}).fail(function (e) {
+		showError(e.error);
 	});
 }
-function pintarMovimientoDiario(hermandad, dia, jornada){
-	jornada = jornada !== undefined? jornada : 0;
-	var jsonPois = {"type": "FeatureCollection", "crs": {
-	"type": "name",
-	"properties": {
-		"name": "urn:ogc:def:crs:EPSG:25830"
-		}
-	},
-		"features": []
-	};
-	//if (mapajsDiario===undefined){
-	(mapajsDiario && mapajsDiario.destroy());
-		mapajsDiario = M.map({
-			controls:["location"],
-			container:"mapDiario",
-			wmcfiles: ['romero_mapa','romero_satelite']
-		});
-	//}else{
-	//	mapajsDiario.removeLayers(mapajsDiario.getLayers());
 
+function pintarRuta(hermandad, dia) {
+	if (mapajsRuta === undefined) {
+		mapajsRuta = M.map({
+			controls: ["location"],
+			container: "mapRuta",
+			wmcfiles: ['romero_mapa', 'romero_satelite'],
+			layers: [lyRuta, lyGPS]
+		});
+	} else {console.log("mapajsRuta ya existe");}
+
+	let filtro = {};
+	if ($.isNumeric(dia)) filtro.codigo_fecha = dia;
+
+	getInfo(getRutas + hermandad, filtro).done(function (data) {
+		if (data.features.length > 0) {
+			lyRuta.source = data;
+			lyRuta.refresh();
+			
+			if (!$.isNumeric(dia) && dia != 'completa') {
+				//ERROR: ¿por qué elimina el filtro?				
+				lyRuta.setFilter(M.filter.EQUAL('sentido', dia));
+				console.log("filtro",lyRuta.getFilter());
+			}
+			mapajsRuta.setBbox(lyRuta.getFeaturesExtent());
+		} else {
+			//JGL: no debería ocurrir
+			showDialog('El trayecto seleccionado no tiene elementos', 'INFORMACIÓN', 'warning');
+		}
+	}).fail(function (e) {
+		showError(e.error);
+	});
+}
+
+function pintarMovimientoDiario(hermandad, dia) {
+	//if (mapajsDiario === undefined) {
+	(mapajsDiario && mapajsDiario.destroy());
+	mapajsDiario = M.map({
+		controls: ["location"],
+		container: "mapDiario",
+		wmcfiles: ['romero_mapa', 'romero_satelite'],
+		layers: [lyRuta, lyGPS, lyPois]
+	});
+	//}else{
+	//mapajsDiario.removeLayers(mapajsDiario.getLayers());
 	//}
 
-	lyRuta = getLayerRuta(vectorSourceDiario);
-	lyGPS = getLayerGPS();
-	mapajsDiario.getMapImpl().addLayer(lyRuta);
-	mapajsDiario.getMapImpl().addLayer(lyGPS);
-	getInfo(getCamino+hermandad.codigo_hermandad, {"codigo_fecha" : dia}).done(function(data){
-		$.each(data.pasos,function(i,paso){
-			texto_fecha = paso.texto_fecha.match(/\d{1,2}:\d{1,2}/);
-			topoNombre = texto_fecha.input.substr(0,texto_fecha.index).trim();
-			fPoi = { "type": "Feature",
-        "geometry": {"type": "Point", "coordinates": [paso.x, paso.y]},
-        "properties": {"nombre": topoNombre,
-											 "hora de paso" : texto_fecha[0]}
+	//lyPois.clear();
+	getInfo(getCamino + hermandad.codigo_hermandad, {
+		"codigo_fecha": dia
+	}).done(function (data) {
+		let sourcePois = {
+			"type": "FeatureCollection",
+			"crs": {
+				"type": "name",
+				"properties": {
+					"name": "urn:ogc:def:crs:EPSG::25830"
+				}
+			},
+			"features": []
+		};
+		$.each(data.pasos, function (i, paso) {
+			let texto_fecha = paso.texto_fecha.match(/\d{1,2}:\d{1,2}/);
+			let topoNombre = texto_fecha.input.substr(0, texto_fecha.index).trim();
+			let fPoi = {
+				"type": "Feature",
+				"id": paso.codigo_toponimo,
+				"geometry": {
+					"type": "Point",
+					"coordinates": [paso.x, paso.y]
+				},
+				"properties": {
+					"nombre": topoNombre,
+					"hora de paso": texto_fecha[0]
+				}
 			};
-			jsonPois.features.push(fPoi);
+			sourcePois.features.push(fPoi);
 		});
-		lyPois = new M.layer.GeoJSON({
-						name: 'Información',
-						source: JSON.stringify(jsonPois)},
-				    {hide: attrNotShow});
-
-		mapajsDiario.addLayers(lyPois);
-		lyPois.setZIndex(99999999);
-		lyPois.getImpl().getOL3Layer().setStyle(poiStyle)
-	}).fail(function(e){
-			console.error(e);
+		console.log(JSON.stringify(sourcePois));
+		lyPois.source = sourcePois;
+		lyPois.refresh();
+	}).fail(function (e) {
+		console.error(e);
 	});
 
 	//en este caso el dia siempre es numérico
-	getInfo(getRutas+hermandad.codigo_hermandad, {"codigo_fecha" : dia}).done(function(data){
-		vectorSourceDiario.clear();
-		features = geoJSONformat.readFeatures(data);
-		if (features.length>0){
-			$("#mapaDiario .subheader").text(hermandad.nombre + " - " +  $("#dropDiaDiario option:selected").text());
-			vectorSourceDiario.addFeatures(features);
+	getInfo(getRutas + hermandad.codigo_hermandad, {
+		"codigo_fecha": dia
+	}).done(function (data) {
+		if (data.features.length > 0) {
+			lyRuta.source = data;
+			lyRuta.refresh();
+			$("#mapaDiario .subheader").text(hermandad.nombre + " - " +
+				$("#dropDiaDiario option:selected").text());
 			$.mobile.changePage('#mapaDiario');
-		}else{
+		} else {
 			//JGL: no debería ocurrir
-			showDialog('El trayecto seleccionado no tiene elementos','INFORMACIÓN','warning');
+			showDialog('El trayecto seleccionado no tiene elementos', 'INFORMACIÓN', 'warning');
 		}
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
-function pintarToponimo(data){
 
-	if (mapajsTopo===undefined){
+function pintarToponimo(data) {
+
+	if (mapajsTopo === undefined) {
 
 		mapajsTopo = M.map({
-			controls:["location"],
+			controls: ["location"],
 			zoom: zoomToPoint,
-			center: data.topoX+","+data.topoY+"*true",
-			container:"mapToponimo",
-			wmcfiles: ['romero_mapa','romero_satelite']
+			center: data.topoX + "," + data.topoY + "*true",
+			container: "mapToponimo",
+			wmcfiles: ['romero_mapa', 'romero_satelite']
 		});
-		mapajsTopo.getImpl().getDrawLayer().getOL3Layer().setStyle(poiStyle);
-	}else{
-		mapajsTopo.setCenter(data.topoX+","+data.topoY+"*true").setZoom(zoomToPoint);
+		mapajsTopo.getLayers({
+			name: "__draw__"
+		})[0].setStyle(poiStyle);
+	} else {
+		mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
 	}
-	lyGPS = getLayerGPS();
-	mapajsTopo.getMapImpl().addLayer(lyGPS);
+
+	mapajsTopo.addLayers(lyGPS);
 	$("#toponimo .ui-title").text(data.topoNombre);
 	$("#toponimo .subheader").text(data.topoHermandad);
 }
 
-function updateLastPos(){
-	filtro ={"emp" : "grea"};
-	return getInfo(getGPS,filtro,false).done(function(data){
-		vectorSourceGPS.clear();
-		vectorSourceGPS.addFeatures(geoJSONformat.readFeatures(data,
-			{featureProjection: 'EPSG:25830'}));
-		if (vectorSourceGPS.getFeatures().length>0){
-			vectorSourceGPS.forEachFeature(function (f){
-				h=hermandades.getByField('etiqueta_gps', f.get('name'));
-				if (h!=null){
-					f.set('color',h.color);
-					h.lastPos = f.getGeometry().getCoordinates();
-				}else{
-					f.set('color',"#000");
-				}
-			});
+function updateLastPos() {
+	let filtro = {
+		"emp": "grea"
+	};
+	return getInfo(getGPS, filtro, false).done(function (data) {
+		if (data.features.length > 0) {
+			lyGPS.source = data;
+			lyGPS.refresh();
 		}
-	}).fail(function(e){showError(e.error);;});
+	}).fail(function (e) {
+		showError(e.error);
+	});
 }
 
-function pintarGPS(hermandad){
-	if(hermandad!=null){ //por si se quiere sólo pintar una hermandad
-		features = vectorSourceGPS.getFeatures();
-		vectorSourceGPS.clear();
-		$.grep(features, function(f) {
-			h=hermandades.getByField('etiqueta_gps', f.get('name'));
-			return (h.codigo_hermandad === hermandad);
-		});
-		vectorSourceGPS.addFeatures(features);
+function pintarGPS(hermandad) {
+	if (hermandad != null) { //por si se quiere sólo pintar una hermandad
+		lyGPS.setFilter(M.filter.EQUAL("codigo_hermandad", hermandad));
 	}
-	bbox = vectorSourceGPS.getFeatures().length>0 ? vectorSourceGPS.getExtent(): bboxContext;
+	bbox = lyGPS.getFeatures().length > 0 ? lyGPS.getFeaturesExtent() : bboxContext;
 
-	if (mapajsGPS===undefined){
+	if (mapajsGPS === undefined) {
 		mapajsGPS = M.map({
-				controls:["location"],
-				container:"mapGPS",
-				bbox: bbox[0]+","+bbox[1]+","+bbox[2]+","+bbox[3],
-				wmcfiles: ['romero_mapa','romero_satelite']
-			});
-
-		lyGPS = getLayerGPS()
-		mapajsGPS.getMapImpl().addLayer(lyGPS);
+			controls: ["location"],
+			container: "mapGPS",
+			bbox: bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3],
+			wmcfiles: ['romero_mapa', 'romero_satelite'],
+			layers: lyGPS
+		});
 	}
 }
-function getLayerGPS(){
-	//TODO: estudiar una única instancia
-	return new ol.layer.Vector({
-		source: vectorSourceGPS,
-		zIndex: 99999999,
-		name: 'GPS',
-		style: function(feature, resolution){
-			return [new ol.style.Style({
-				image: new ol.style.Circle({
-					radius: 5,
-					fill: new ol.style.Fill({
-						color: feature.get('color')
-					}),
-					stroke: new ol.style.Stroke({
-						color: "#000",
-						width: 1
-					})
-				}),
-				text: new ol.style.Text({
-					text: feature.get('name') + "\n\r" + formatDate(new Date(feature.get('ts'))),
-					font: 'bold 9px arial',
-					offsetY: -18,
-					fill: new ol.style.Fill({color: "#000"}),
-					stroke: new ol.style.Stroke({
-						color: "#ffffff",
-						width: 3
-					})
-				})
-			})];
+
+function bindEvents() {
+	$(document).on("pagechange", function (e, data) {
+		if ($.type(data.toPage) == "object") {
+			switch (data.toPage[0].id) {
+				case 'ruta':
+					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
+					//mapajsRuta.getMapImpl().updateSize();
+					mapajsRuta.refresh();
+					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					break;
+				case 'toponimo':
+					pintarToponimo(data.options);
+					//mapajsTopo.getMapImpl().updateSize();
+					mapajsTopo.refresh();
+					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					break;
+				case 'mapaDiario':
+					mapajsDiario.setBbox(lyRuta.getFeaturesExtent());
+					//mapajsDiario.getMapImpl().updateSize();
+					mapajsDiario.refresh();
+					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					break;
+				case 'gps':
+					updateLastPos().done(function () {
+						pintarGPS();
+						//JGL: si sólo se quiere pintar la hermandad seleccionada
+						//pintarGPS($("#dropHermandadGps").val());
+						//mapajsGPS.getMapImpl().updateSize();
+						mapajsGPS.refresh();
+						//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					});
+					break;
+				default:
+					break;
+			}
 		}
 	});
-}
-function bindEvents(){
-	$(document).on("pagechange", function (e, data) {
-  	  	if ($.type(data.toPage) == "object"){
-	  		switch(data.toPage[0].id) {
-	  			case 'ruta':
-		  			pintarRuta($("#dropHermandadRuta").val(),$("#dropDiaRuta").val());
-		  			mapajsRuta.getMapImpl().updateSize();
-						if (vectorSourceGPS.getFeatures().length<=0) showDialog(noGPS,'ERROR','error');
-	  			break;
-	  			case 'toponimo':
-		  			pintarToponimo(data.options);
-  	  			mapajsTopo.getMapImpl().updateSize();
-						if (vectorSourceGPS.getFeatures().length<=0) showDialog(noGPS,'ERROR','error');
-	  			break;
-					case 'mapaDiario':
-						mapajsDiario.setBbox(vectorSourceDiario.getExtent());
-						mapajsDiario.getMapImpl().updateSize();
-						if (vectorSourceGPS.getFeatures().length<=0) showDialog(noGPS,'ERROR','error');
-	  			break;
-	  			case 'gps':
-		  			updateLastPos().done(function(){
-		  				pintarGPS();
-		  				//JGL: si sólo se quiere pintar la hermandad seleccionada
-		  				//pintarGPS($("#dropHermandadGps").val());
-		  				mapajsGPS.getMapImpl().updateSize();
-							if (vectorSourceGPS.getFeatures().length<=0) showDialog(noGPS,'ERROR','error');
-		  			});
-	  			break;
-	  			default:
-	  			break;
-	  		}
-	  	}
-  	});
-	$("#dropHermandadCamino").on("change", function() {
-		cargarCamino($(this).val()).done(function(){$("#listCamino").collapsibleset().trigger("create");});
+	$("#dropHermandad").on("change", function () {
+		informacionHermandad($(this).val());
+		$("#flipChkFavorita").flipswitch("refresh");
 	});
-	$("#dropDiaDiario").on("change", function() {
-		cargarDiario($(this).val()).done(function(){$("#listDiario").listview("refresh");});
+	$("#dropHermandadCamino").on("change", function () {
+		cargarCamino($(this).val()).done(function () {
+			$("#listCamino").collapsibleset().trigger("create");
+		});
 	});
-	$("#dropPasos").on("change", function() {
+	$("#dropDiaDiario").on("change", function () {
+		cargarDiario($(this).val()).done(function () {
+			$("#listDiario").listview("refresh");
+		});
+	});
+	$("#dropPasos").on("change", function () {
 		cargarDiasPaso($(this).val()).done(
-			function(){
+			function () {
 				$("#dropDiasPaso").selectmenu("refresh");
-				cargarHoras($("#dropPasos").val(),$("#dropDiasPaso").val()).done(function(){
+				cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(function () {
 					$("#listHoras").listview("refresh");
 				});
 			});
 	});
-	$("#dropDiasPaso").on("change", function() {
-		cargarHoras($("#dropPasos").val(),$("#dropDiasPaso").val()).done(
-			function(){
+	$("#dropDiasPaso").on("change", function () {
+		cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(
+			function () {
 				$("#listHoras").listview("refresh");
 			});
 	});
-	$("#dropHermandadRuta").on("change", function() {
-		cargarFechasHermandad($("#dropHermandadRuta").val()).done(function(){
+	$("#dropHermandadRuta").on("change", function () {
+		cargarFechasHermandad($("#dropHermandadRuta").val()).done(function () {
 			$("#dropDiaRuta").selectmenu("refresh");
-			pintarRuta($("#dropHermandadRuta").val(),$("#dropDiaRuta").val());
+			pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
 		});
 	});
-	$("#dropDiaRuta").on("change", function() {
-		pintarRuta($("#dropHermandadRuta").val(),$("#dropDiaRuta").val());
+	$("#dropDiaRuta").on("change", function () {
+		pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
 	});
-	$("#dropHermandadGps").on("change", function() {
+	$("#dropHermandadGps").on("change", function () {
 		//pintarGPS($(this).val()); //JGL: para sólo pintar la hermandad
-		if($(this).val()!=0){
-			h = hermandades.getByField('codigo_hermandad',$(this).val());
-			if (h!=null && h.lastPos){
-				mapajsGPS.setCenter(h.lastPos[0]+","+h.lastPos[1]).setZoom(zoomToPoint);
-			}else{
+		if ($(this).val() != 0) {
+			let h = hermandades.getByField('codigo_hermandad', $(this).val());
+			if (h != null && h.lastPos) {
+				mapajsGPS.setCenter(h.lastPos[0] + "," + h.lastPos[1]).setZoom(zoomToPoint);
+			} else {
 				showDialog(noPosicion, "ERROR", "error");
 			}
-		}else{
-			if (vectorSourceGPS.getFeatures().length>0){
-				mapajsGPS.setBbox(vectorSourceGPS.getExtent());
-			}else{
-				showDialog(noGPS,'ERROR','error');
+		} else {
+			if (lyGPS.getFeatures().length > 0) {
+				mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
+			} else {
+				showDialog(noGPS, 'ERROR', 'error');
 			}
 		}
 	});
-
+	$("#flipChkFavorita").on("change", function (e) {
+		let hSel = $("#dropHermandad").val();
+		let hFav = localStorage.getItem("hermandadFavorita");
+		if (this.checked) {
+			guardarFavorita(hSel);
+		} else if (hSel == hFav){
+			//estoy desmarcando la favorita
+			guardarFavorita(null);
+		}
+	});
 }
 
-$(document).ready(function() {
-	if( window.isApp ) {
+$(document).ready(function () {
+	if (window.isApp) {
 		document.addEventListener("deviceready", onDeviceReady, false);
-    } else {
-        onDeviceReady();
-    }
+	} else {
+		onDeviceReady();
+	}
 });
 
-function onDeviceReady(){
+function onDeviceReady() {
 	//JGL: actualización dinámica
-	updateLastPos().always(function(){window.setInterval(updateLastPos, updateGPS*1000);});
-	$.when.apply($,[cargarDias(),
-		    cargarHermandades(),
-		    cargarPasos(),
-		    cargarHermandadesRuta()]).always(function(){
-		    //JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
-			    if(window.isApp){
-						setTimeout(function() {
-	        			navigator.splashscreen.hide();
-	    			}, 2000);
-		 			}
-		    });
-    bindEvents();
-};
+	updateLastPos().always(function () {
+		window.setInterval(updateLastPos, updateGPS * 1000);
+	});
+	$.when.apply($, [cargarDias(),
+		cargarHermandades(),
+		cargarPasos(),
+		cargarHermandadesRuta()
+	]).always(function () {
+		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
+		if (window.isApp) {
+			setTimeout(function () {
+				navigator.splashscreen.hide();
+			}, 2000);
+		}
+	});
+	bindEvents();
+}
 
 function showDialog(message, title, severity) {
-	if (message && message!=null && message!=''){
-		M.dialog.show(message,title,severity,document.body).then(function(html) {
-     var okButton = $(this).find('div.m-button > button');
-     $(okButton).on("click", function () {
-     	if (!window.iOS && title.toUpperCase().indexOf('INESPERADO')>-1){
-     		navigator.app.exitApp();
-			}else{
-     		dialog.remove();
-     	}
-     });
-    });
-  }
-};
-function showInfo(){
-	showDialog(htmlAcercade,'Acerca de','info');
+	if (message && message != null && message != '') {
+		M.dialog.show(message, title, severity, document.body).then(function (html) {
+			var okButton = $(this).find('div.m-button > button');
+			$(okButton).on("click", function () {
+				if (!window.iOS && title.toUpperCase().indexOf('INESPERADO') > -1) {
+					navigator.app.exitApp();
+				} else {
+					dialog.remove();
+				}
+			});
+		});
+	}
 }
-function showError(e){
+
+function showInfo() {
+	showDialog(htmlAcercade, 'Acerca de', 'info');
+}
+
+function showError(e) {
 	errTxt = errMsg[errCode.indexOf(e.codigo)] || e.mensaje;
-	showDialog(errTxt,'ERROR','error');
+	showDialog(errTxt, 'ERROR', 'error');
+}
+
+function guardarFavorita(idHermandad) {
+	localStorage.setItem("hermandadFavorita", idHermandad);
 }
