@@ -1,5 +1,5 @@
 /***********variables globales********/
-let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario;
+let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
 let dias = null;
 let hermandades = [];
 hermandades.getByField = function (field, value) {
@@ -152,10 +152,12 @@ function cargarPasos() {
 
 function informacionHermandad(idHermandad) {
 	let hFav = localStorage.getItem("hermandadFavorita");
-	$("#flipChkFavorita").prop('checked', hFav == idHermandad);
+	if(hFav == idHermandad) 
+		$(".star.fa").removeClass("fa-star-o").addClass("fa-star");
+	else
+		$(".star.fa").removeClass("fa-star").addClass("fa-star-o");
 
 	let h = hermandades.getByField('codigo_hermandad', idHermandad);
-	console.log(h);
 }
 
 function cargarCamino(idHermandad) {
@@ -247,14 +249,23 @@ function cargarDiasPaso(idPaso) {
 function cargarDias() {
 	return getInfo(getDias).done(function (data) {
 		dias = data.dias_semana;
+		let cqlOcupados = "";
 		$.each(dias, function (i, dia) {
 			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
 			if (dia.fecha == formatDate(new Date())){
 				option.attr('selected', 'selected');
+				cqlOcupados = dia.codigo_fecha;
 			}
 			$("#dropDiaDiario").append(option);
 		});
 		cargarDiario($("#dropDiaDiario").val());
+		//let lyCaminosOcupados = M.layer.WMS(); cql = cqlOcupados
+		mapajsOcupados = M.map({
+			controls: ["location"],
+			container: "mapOcupados",
+			layers: [lyGPS], //añadir la que capa de caminos ocupados
+			wmcfiles: ['romero_mapa', 'romero_satelite']	
+		});
 	}).fail(function (e) {
 		showError(e.error);
 	});
@@ -478,6 +489,12 @@ function bindEvents() {
 						//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
 					break;
+				case 'mapaOcupados':
+					//mapajsDiario.getMapImpl().updateSize();
+					mapajsOcupados.refresh();					
+					$('button#m-location-button').click();
+					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
+					break;
 				default:
 					break;
 			}
@@ -485,7 +502,6 @@ function bindEvents() {
 	});
 	$("#dropHermandad").on("change", function () {
 		informacionHermandad($(this).val());
-		$("#flipChkFavorita").flipswitch("refresh");
 	});
 	$("#dropHermandadCamino").on("change", function () {
 		cargarCamino($(this).val()).done(function () {
@@ -538,16 +554,20 @@ function bindEvents() {
 			}
 		}
 	});
-	$("#flipChkFavorita").on("change", function (e) {
+
+	$("#tablaHermandad th").click(function() {
+		$('.star.fa').toggleClass("fa-star fa-star-o");
 		let hSel = $("#dropHermandad").val();
 		let hFav = localStorage.getItem("hermandadFavorita");
-		if (this.checked) {
+		if ($('.star.fa').hasClass('fa-star')) {
 			guardarFavorita(hSel);
+			$("#dropHermandadCamino").val(hSel);
 		} else if (hSel == hFav){
 			//estoy desmarcando la favorita
 			guardarFavorita(null);
 		}
 	});
+
 }
 
 $(document).ready(function () {

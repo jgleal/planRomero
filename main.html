@@ -9,7 +9,8 @@
 
   <link href="lib/jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
   <link href="lib/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
-  <link href="css/app.css" rel="stylesheet" type="text/css" />
+  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/app.css" rel="stylesheet" type="text/css" />  
   <script type="text/javascript" src="cordova.js"></script>
   <script src="lib/jquery/jquery-1.12.1.min.js"></script>
   <script>
@@ -28,7 +29,7 @@
 
 
 
-  <title>Plan Romero 2017</title>
+  <title>Plan Romero 2018</title>
 </head>
 
 <body>
@@ -36,13 +37,13 @@
   <!-- Page: home  -->
   <div id="home" data-role="page">
     <div data-role="header" data-position="fixed">
-      <h3>Plan Romero 2017</h3>
+      <h3>Plan Romero 2018</h3>
       <a href="javascript:showInfo()" class="ui-btn-right ui-btn ui-btn-inline ui-btn-icon-right ui-icon-info ui-btn-icon-notext"></a>
     </div>
     <div role="main" class="ui-content with_background">
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">Hermandades</li>
-        <li data-icon="info">
+        <li data-icon="star">
           <a href="#hermandad">Datos de hermandad</a>
         </li>
         <li data-icon="navigation">
@@ -57,6 +58,7 @@
       </ul>
       <a class="ui-btn ui-icon-calendar ui-btn-icon-right" href="#diario">Movimiento diario</a>
       <a class="ui-btn ui-icon-clock ui-btn-icon-right" href="#horas">Paso de hermandades</a>
+      <a class="ui-btn ui-icon-alert ui-btn-icon-right" href="#mapaOcupados">Caminos Ocupados</a>
     </div>
   </div>
   <!-- Page: hermandad  -->
@@ -76,12 +78,47 @@
     </div>
     <div role="main" class="ui-content with_background">
       <!-- CONTENIDO -->
-      <div class="ui-field-contain">
-        <label for="flipChkFavorita">Marcar hermandad como favorita:</label>
-        <input type="checkbox" data-role="flipswitch" name="flipChkFavorita" id="flipChkFavorita">
+      <div style="margin-left:auto;margin-right:auto; margin-top:1em;width:95%;">
+        <table id="tablaHermandad">
+          <col style="width:30%">
+          <col style="width:70%">
+          <thead>
+            <tr>
+              <th colspan="2">
+                <span class="star fa fa-star-o"></span>Marcar hermandad como favorita
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dato1</td>
+              <td>Respuesta Dato1</td>
+            </tr>
+            <tr>
+              <td>Dato1</td>
+              <td>Respuesta Dato1</td>
+            </tr>
+            <tr>
+              <td>Dato1</td>
+              <td>Respuesta Dato1</td>
+            </tr>
+            <tr>
+              <td>Dato1</td>
+              <td>Respuesta Dato1</td>
+            </tr>
+            <tr>
+              <td>Dato1</td>
+              <td>Respuesta Dato1</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <!--content-->
+
+
+
+  </div>
+  <!--content-->
   </div>
   <!--fin camino-->
   <!-- Page: ruta  -->
@@ -255,7 +292,7 @@
       <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3></h3>
-      <p class="subheader" </p>
+      <p class="subheader"></p>
     </div>
     <div role="main" class="ui-content">
       <div id="mapToponimo" class="m-mapea-container"></div>
@@ -264,6 +301,18 @@
 
   </div>
   <!--fin toponimo-->
+  <!-- Page: gps  -->
+  <div id="mapaOcupados" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Caminos Ocupados</h3>
+    </div>
+    <div role="main" class="ui-content">
+      <div id="mapOcupados"></div>
+    </div>
+  </div>
+  <!--fin gps-->
   </div>
 
 </body>
