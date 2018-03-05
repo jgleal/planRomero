@@ -134,6 +134,10 @@ div.with_background {
   border: 1px solid #ddd;
   padding: 8px;
 }
+#tablaHermandad td:nth-child(1) {  
+  font-weight: bold;
+  text-transform: capitalize;
+}
 #tablaHermandad tr:nth-child(even){background-color: #c0b997;}
 #tablaHermandad tr:nth-child(odd){background-color: floralwhite;}
 #tablaHermandad th {

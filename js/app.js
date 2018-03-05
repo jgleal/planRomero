@@ -158,6 +158,14 @@ function informacionHermandad(idHermandad) {
 		$(".star.fa").removeClass("fa-star").addClass("fa-star-o");
 
 	let h = hermandades.getByField('codigo_hermandad', idHermandad);
+	//TODO: borrar test
+	h.inf_adicional = {'web': 'http://web.com','descripción': 'Lorem ipusum tururum', 'teléfono': '955955955'};
+	//
+	let tbodyTabla = $("#tablaHermandad tbody");
+	$.each(h.inf_adicional,function (key, val){
+		let tr = $("<tr>").append($("<td>").html(key)).append($("<td>").html(val));
+		tbodyTabla.append(tr);
+	});
 }
 
 function cargarCamino(idHermandad) {
