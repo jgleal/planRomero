@@ -1,5 +1,4 @@
 /***********variables globales********/
-
 let dias = null;
 let hermandades = [];
 hermandades.getByField = function (field, value) {
@@ -490,19 +489,16 @@ function bindEvents() {
 			switch (data.toPage[0].id) {
 				case "ruta":
 					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
-					//mapajsRuta.getMapImpl().updateSize();
 					mapajsRuta.refresh();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "toponimo":
 					pintarToponimo(data.options);
-					//mapajsTopo.getMapImpl().updateSize();
 					mapajsTopo.refresh();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
 					mapajsDiario.setBbox(lyRuta.getFeaturesExtent());
-					//mapajsDiario.getMapImpl().updateSize();
 					mapajsDiario.refresh();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
@@ -511,13 +507,11 @@ function bindEvents() {
 						pintarGPS();
 						//JGL: si sólo se quiere pintar la hermandad seleccionada
 						//pintarGPS($("#dropHermandadGps").val());
-						//mapajsGPS.getMapImpl().updateSize();
 						mapajsGPS.refresh();
 						//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
 					break;
 				case "mapaOcupados":
-					//mapajsDiario.getMapImpl().updateSize();
 					mapajsOcupados.refresh();
 					$("button#m-location-button").click();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
