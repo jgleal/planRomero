@@ -12,7 +12,7 @@ hermandades.getByField = function (field, value) {
 hermandades.add = function (h) {
 	this.push.apply(this, h);
 };
-let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
+
 let lyGPS = new M.layer.GeoJSON({
 	name: "GPS"
 }, {
@@ -62,12 +62,26 @@ let lyRuta = new M.layer.GeoJSON({
 	}),
 	hide: attrNotShow
 });
+let lyRutaDiario = new M.layer.GeoJSON({
+	name: "RutaDiario",
+	extract: false
+}, {
+	style: new M.style.Line({
+		stroke: {
+			color: "{{color}}",
+			width: 5
+		}
+	}),
+	hide: attrNotShow
+});
 let lyPois = new M.layer.GeoJSON({
-	name: "Información"
+	name: "Información",
+	crs: "25830"
 }, {
 	style: poiStyle,
 	hide: attrNotShow
 });
+let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
 /*************************************/
 
 function getInfo(url, filtro = {}, showLoading = true) {
@@ -132,7 +146,7 @@ function cargarHermandadesRuta() {
 		});
 		cargarFechasHermandad($("#dropHermandadRuta").val());
 	}).fail(function (e) {
-		showError(e.error);;
+		showError(e.error);
 	});
 }
 
@@ -147,7 +161,7 @@ function cargarPasos() {
 			cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val());
 		});
 	}).fail(function (e) {
-		showError(e.error);;
+		showError(e.error);
 	});
 }
 
@@ -275,11 +289,11 @@ function cargarDias() {
 			$("#dropDiaDiario").append(option);
 		});
 		cargarDiario($("#dropDiaDiario").val());
-		//let lyCaminosOcupados = M.layer.WMS(); cql = cqlOcupados
+		//let lyCaminosOcupados = M.layer.WMS(); añadir cql = cqlOcupados
 		mapajsOcupados = M.map({
 			controls: ["location"],
 			container: "mapOcupados",
-			layers: [lyGPS], //añadir la que capa de caminos ocupados
+			layers: [lyGPS], //lyCaminosOcupados
 			wmcfiles: ["romero_mapa", "romero_satelite"]
 		});
 	}).fail(function (e) {
@@ -317,35 +331,28 @@ function cargarFechasHermandad(idHermandad) {
 }
 
 function pintarRuta(hermandad, dia) {
-	if (mapajsRuta === undefined) {
-		mapajsRuta = M.map({
-			controls: ["location"],
-			container: "mapRuta",
-			wmcfiles: ["romero_mapa", "romero_satelite"],
-			layers: [lyRuta, lyGPS]
-		});
-	} else {
-		//console.log("mapajsRuta ya existe");
-	}
-
+	
 	let filtro = {};
 	if ($.isNumeric(dia)) filtro.codigo_fecha = dia;
 
-	getInfo(getRutas + hermandad, filtro).done(function (data) {
+	
+	return getInfo(getRutas + hermandad, filtro).done(function (data) {
 		if (data.features.length > 0) {
-			lyRuta.source = data;
-			lyRuta.refresh();
-			
+			console.log(data);
+			lyRuta.setSource(data);
+
+			//lyRuta.source = data;
+			//lyRuta.refresh();
 			if (!$.isNumeric(dia) && dia != "completa") {
-				//ERROR: ¿por qué elimina el filtro?				
 				lyRuta.setFilter(M.filter.EQUAL("sentido", dia));
 				console.log("filtro", lyRuta.getFilter());
 			}
-			mapajsRuta.setBbox(lyRuta.getFeaturesExtent());
+			
 			let kmsRuta = 0;
 			$.each(lyRuta.getFeatures(), function (i,f){
 				kmsRuta += f.getAttribute('kms');
-			});
+			});		
+			
 			//TODO borrar test
 			kmsRuta = lyRuta.getFeatures().length;
 			//
@@ -360,36 +367,14 @@ function pintarRuta(hermandad, dia) {
 }
 
 function pintarMovimientoDiario(hermandad, dia) {
-	//if (mapajsDiario === undefined) {
-	(mapajsDiario && mapajsDiario.destroy());
-	mapajsDiario = M.map({
-		controls: ["location"],
-		container: "mapDiario",
-		wmcfiles: ["romero_mapa", "romero_satelite"],
-		layers: [lyRuta, lyGPS, lyPois]
-	});
-	//}else{
-	//mapajsDiario.removeLayers(mapajsDiario.getLayers());
-	//}
-
-	//lyPois.clear();
 	getInfo(getCamino + hermandad.codigo_hermandad, {
 		"codigo_fecha": dia
 	}).done(function (data) {
-		let sourcePois = {
-			"type": "FeatureCollection",
-			"crs": {
-				"type": "name",
-				"properties": {
-					"name": "urn:ogc:def:crs:EPSG::25830"
-				}
-			},
-			"features": []
-		};
+		lyPois.clear();
 		$.each(data.pasos, function (i, paso) {
 			let texto_fecha = paso.texto_fecha.match(/\d{1,2}:\d{1,2}/);
 			let topoNombre = texto_fecha.input.substr(0, texto_fecha.index).trim();
-			let fPoi = {
+			let fPoi = new M.Feature(paso.codigo_toponimo, {
 				"type": "Feature",
 				"id": paso.codigo_toponimo,
 				"geometry": {
@@ -400,23 +385,23 @@ function pintarMovimientoDiario(hermandad, dia) {
 					"nombre": topoNombre,
 					"hora de paso": texto_fecha[0]
 				}
-			};
-			sourcePois.features.push(fPoi);
+			});
+			//console.log(JSON.stringify(fPoi.getGeoJSON()));
+			lyPois.addFeatures(fPoi);
 		});
-		console.log(JSON.stringify(sourcePois));
-		lyPois.source = sourcePois;
-		lyPois.refresh();
+				
 	}).fail(function (e) {
 		console.error(e);
 	});
-
+	
 	//en este caso el dia siempre es numérico
 	getInfo(getRutas + hermandad.codigo_hermandad, {
 		"codigo_fecha": dia
 	}).done(function (data) {
+		//lyRutaDiario.clear();
 		if (data.features.length > 0) {
-			lyRuta.source = data;
-			lyRuta.refresh();
+			console.log("entro");
+			lyRutaDiario.setSource(data);
 			$("#mapaDiario .subheader").text(hermandad.nombre + " - " +
 				$("#dropDiaDiario option:selected").text());
 			$.mobile.changePage("#mapaDiario");
@@ -430,26 +415,9 @@ function pintarMovimientoDiario(hermandad, dia) {
 }
 
 function pintarToponimo(data) {
-
-	if (mapajsTopo === undefined) {
-
-		mapajsTopo = M.map({
-			controls: ["location"],
-			zoom: zoomToPoint,
-			center: data.topoX + "," + data.topoY + "*true",
-			container: "mapToponimo",
-			wmcfiles: ["romero_mapa", "romero_satelite"]
-		});
-		mapajsTopo.getLayers({
-			name: "__draw__"
-		})[0].setStyle(poiStyle);
-	} else {
-		mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
-	}
-
-	mapajsTopo.addLayers(lyGPS);
 	$("#toponimo .ui-title").text(data.topoNombre);
 	$("#toponimo .subheader").text(data.topoHermandad);
+	mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
 }
 
 function updateLastPos() {
@@ -458,8 +426,7 @@ function updateLastPos() {
 	};
 	return getInfo(getGPS, filtro, false).done(function (data) {
 		if (data.features.length > 0) {
-			lyGPS.source = data;
-			lyGPS.refresh();
+			lyGPS.setSource(data);
 		}
 	}).fail(function (e) {
 		showError(e.error);
@@ -470,17 +437,8 @@ function pintarGPS(hermandad) {
 	if (hermandad != null) { //por si se quiere sólo pintar una hermandad
 		lyGPS.setFilter(M.filter.EQUAL("codigo_hermandad", hermandad));
 	}
-	bbox = lyGPS.getFeatures().length > 0 ? lyGPS.getFeaturesExtent() : bboxContext;
-
-	if (mapajsGPS === undefined) {
-		mapajsGPS = M.map({
-			controls: ["location"],
-			container: "mapGPS",
-			bbox: bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3],
-			wmcfiles: ["romero_mapa", "romero_satelite"],
-			layers: lyGPS
-		});
-	}
+	let bbox = lyGPS.getFeatures().length > 0 ? lyGPS.getFeaturesExtent() : bboxContext;
+	mapajsGPS.setBbox(bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3]);
 }
 
 function bindEvents() {
@@ -488,17 +446,20 @@ function bindEvents() {
 		if ($.type(data.toPage) == "object") {
 			switch (data.toPage[0].id) {
 				case "ruta":
-					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
-					mapajsRuta.refresh();
+					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val()).done(
+						() => {
+							mapajsRuta.refresh();
+						}
+					);
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "toponimo":
-					pintarToponimo(data.options);
 					mapajsTopo.refresh();
+					pintarToponimo(data.options);
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
-					mapajsDiario.setBbox(lyRuta.getFeaturesExtent());
+					mapajsDiario.setBbox(lyRutaDiario.getFeaturesExtent());
 					mapajsDiario.refresh();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
@@ -595,6 +556,7 @@ function bindEvents() {
 		}
 	});
 
+	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
 }
 
 $(document).ready(function () {
@@ -623,20 +585,70 @@ function onDeviceReady() {
 		}
 	});
 	bindEvents();
-}
 
-function showDialog(message, title, severity) {
-	if (message && message != null && message != "") {
-		M.dialog.show(message, title, severity, document.body).then(function (html) {
-			var okButton = $(this).find("div.m-button > button");
-			$(okButton).on("click", function () {
+	mapajsRuta = M.map({
+		controls: ["location"],
+		container: "mapRuta",
+		wmcfiles: ["romero_mapa", "romero_satelite"],
+		layers: [lyRuta, lyGPS]
+	});
+
+	mapajsDiario = M.map({
+		controls: ["location"],
+		container: "mapDiario",
+		wmcfiles: ["romero_mapa", "romero_satelite"],
+		layers: [lyRutaDiario, lyGPS, lyPois]
+	});
+
+	mapajsGPS = M.map({
+		controls: ["location"],
+		container: "mapGPS",
+		wmcfiles: ["romero_mapa", "romero_satelite"],
+		layers: [lyGPS]
+	});
+	mapajsTopo = M.map({
+		controls: ["location"],
+		layers: [lyGPS],
+		container: "mapToponimo",
+		wmcfiles: ["romero_mapa", "romero_satelite"]
+	});
+	//TODO: ¿se podía ya cambiar estilo por defecto de la drawLayer?
+	mapajsTopo.getLayers({
+		name: "__draw__"
+	})[0].setStyle(poiStyle);
+
+	M.dialog.show = function (message, title, severity, element) {
+		return M.template.compile('dialog.html', {
+		  'jsonp': true,
+		  'vars': {
+			'message': message,
+			'title': title,
+			'severity': severity
+		  }
+		}).then(function (html) {
+		  // removes previous dialogs
+		  M.dialog.remove();
+			
+		  // adds listener to close the dialog
+		  var okButton = html.querySelector('div.m-button > button');
+		  $(okButton).on("click", function () {
 				if (!window.iOS && title.toUpperCase().indexOf("INESPERADO") > -1) {
 					navigator.app.exitApp();
 				} else {
-					dialog.remove();
+					M.dialog.remove();
 				}
 			});
+		  if (!(element instanceof HTMLElement)) element = document.querySelector("#"+element);
+		  if (element === undefined) element = document.querySelector('div.m-mapea-container');
+		  element.appendChild(html);
 		});
+	  };
+}
+
+function showDialog(message, title, severity) {
+	console.log(severity,message);
+	if (message && message != null && message != "") {
+		M.dialog.show(message, title, severity, document.body);
 	}
 }
 
