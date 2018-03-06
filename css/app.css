@@ -129,7 +129,13 @@ div.with_background {
   border-collapse: collapse;
   width: 100%;
 }
-
+#tablaHermandad th {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  text-align: left;
+  background-color: darkgreen;
+  color: white;
+}
 #tablaHermandad td, #datoshermandad th {
   border: 1px solid #ddd;
   padding: 8px;
@@ -141,13 +147,6 @@ div.with_background {
 }
 #tablaHermandad tr:nth-child(even){background-color: #c0b997;}
 #tablaHermandad tr:nth-child(odd){background-color: floralwhite;}
-#tablaHermandad th {
-  padding-top: 3px;
-  padding-bottom: 3px;
-  text-align: left;
-  background-color: darkgreen;
-  color: white;
-}
 .star {
   font-size: 25px;
   padding: 0.15em

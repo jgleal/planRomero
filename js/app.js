@@ -1,5 +1,5 @@
 /***********variables globales********/
-let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
+
 let dias = null;
 let hermandades = [];
 hermandades.getByField = function (field, value) {
@@ -13,6 +13,7 @@ hermandades.getByField = function (field, value) {
 hermandades.add = function (h) {
 	this.push.apply(this, h);
 };
+let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
 let lyGPS = new M.layer.GeoJSON({
 	name: "GPS"
 }, {
@@ -584,12 +585,18 @@ function bindEvents() {
 	$("#tablaHermandad th").click(function () { //funcionalidad a toda la cabecera
 		$(".star.fa").toggleClass("fa-star fa-star-o");
 		let hSel = $("#dropHermandad").val();
+		let h = hermandades.getByField("codigo_hermandad", hSel);
 		let hFav = localStorage.getItem("hermandadFavorita");
 		if ($(".star.fa").hasClass("fa-star")) {
 			guardarFavorita(hSel);
 			$("#dropHermandadCamino").val(hSel).change();
+			if (h.gps) 
+				$("#dropHermandadGps").val(hSel).change();
+			else
+				$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
 		} else if (hSel == hFav) { //desmarcando favorita
-			$("#dropHermandadCamino").val($("#dropHermandadCamino option:first").val());
+			$("#dropHermandadCamino").val($("#dropHermandadCamino option:first").val()).change();
+			$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
 			guardarFavorita(null);
 		}
 	});
