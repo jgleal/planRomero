@@ -34,7 +34,8 @@ let lyPois = new M.layer.GeoJSON({
 	hide: attrNotShow
 });
 let lyGPS = new M.layer.GeoJSON({
-	name: "GPS"
+	name: "GPS",
+	extract: false
 }, {
 	style: new M.style.Point({
 		radius: 5,
@@ -42,24 +43,29 @@ let lyGPS = new M.layer.GeoJSON({
 			color: function (feature) {
 				let h = hermandades.getByField("etiqueta_gps", feature.getAttribute("name"));
 				if (h != null) {
-					h.lastPos = feature.getGeometry().coordinates;
-					return h.color;
+				    return h.color;
 				} else {
 					return "#000";
 				}
 			},
-			opacity: 0.5
+			opacity: function (feature){
+				if (feature.getAttribute("order")==0)//última posición
+					return 0.5;
+				else
+					return 0.3; 
+			}
 		},
 		stroke: {
 			color: "#FF0000"
 		},
 		label: {
 			text: function (feature) {
+				if (feature.getAttribute("order")==0) //solo última posición
 				return feature.getAttribute("name") + "\n\r" +
 					formatDate(new Date(feature.getAttribute("ts")), "gps");
 			},
 			font: "bold 9px arial",
-			offsetY: -18,
+			offset: [0,-25],
 			fill: {
 				color: "#000"
 			},
@@ -100,25 +106,19 @@ function createMaps() {
 		controls: ["location"],
 		container: "mapRuta",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
-		layers: [lyRuta, lyGPS]
+		layers: [lyRuta]
 	});
 
 	mapajsDiario = M.map({
 		controls: ["location"],
 		container: "mapDiario",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
-		layers: [lyRutaDiario, lyGPS, lyPois]
+		layers: [lyRutaDiario, lyPois]
 	});
 
-	mapajsGPS = M.map({
-		controls: ["location"],
-		container: "mapGPS",
-		wmcfiles: ["romero_mapa", "romero_satelite"],
-		layers: [lyGPS]
-	});
+	
 	mapajsTopo = M.map({
 		controls: ["location"],
-		layers: [lyGPS],
 		container: "mapToponimo",
 		wmcfiles: ["romero_mapa", "romero_satelite"]
 	});
@@ -126,12 +126,18 @@ function createMaps() {
 	mapajsTopo.getLayers({
 		name: "__draw__"
 	})[0].setStyle(poiStyle);
-
+	
 	mapajsOcupados = M.map({
 		controls: ["location"],
 		container: "mapOcupados",
-		layers: [lyGPS],
 		wmcfiles: ["romero_mapa", "romero_satelite"]
+	});
+
+	mapajsGPS = M.map({
+		controls: ["location"],
+		container: "mapGPS",
+		wmcfiles: ["romero_mapa", "romero_satelite"],
+		layers: [lyGPS]
 	});
 }
 
@@ -148,5 +154,17 @@ function addCaminosOcupados(mapa) {
 		transparent: true,
 		tiled: false
 	});
+	console.log(mapa);
 	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
+}
+function establecerMapaGPSlayer(mapa){
+	lyGPS.getImpl().map.removeLayers([lyGPS]);
+	mapa.addLayers(lyGPS);
+}
+
+function transformar(arrCoords){
+	var epsg4326 = proj4.defs('EPSG:4326');
+	var epsg25830 = proj4.defs('EPSG:25830');
+	coordTrans = proj4(epsg25830,epsg4326,arrCoords);
+	return coordTrans[1]+","+coordTrans[0];
 }

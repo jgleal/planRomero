@@ -147,7 +147,7 @@ div.with_background {
 }
 #tablaHermandad tr:nth-child(even){background-color: #c0b997;}
 #tablaHermandad tr:nth-child(odd){background-color: floralwhite;}
-.star {
+.star, .location-arrow{
   font-size: 25px;
   padding: 0.15em
 }
@@ -157,6 +157,17 @@ div.with_background {
   border-radius: 5px;
   font-weight: bold;
   padding: 0.2em;
+  position: absolute;
+  opacity: 0.8;
+  background-color: rgb(207, 207, 204);
+  z-index: 9999999;
+}
+#iralli{
+  top: 5em;
+  left: 0.5em;
+  border-radius: 5px;
+  font-weight: bold;
+  padding: 0.5em;
   position: absolute;
   opacity: 0.8;
   background-color: rgb(207, 207, 204);

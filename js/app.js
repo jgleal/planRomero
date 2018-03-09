@@ -215,6 +215,7 @@ function cargarDias() {
 			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
 			if (dia.fecha == formatDate(new Date())) {
 				option.attr("selected", "selected");
+				
 			}
 			$("#dropDiaDiario").append(option);
 		});
@@ -350,9 +351,22 @@ function updateLastPos() {
 		"emp": "grea"
 	};
 	return getInfo(getGPS, filtro, false).done(function (data) {
-		if (data.features.length > 0) {
-			lyGPS.setSource(data);
-		}
+		let dataWithOrder = JSON.parse(JSON.stringify(data));
+		dataWithOrder.features = [];
+		hermandades.filter(h => h.gps).forEach (h => {
+			hPositions = data.features.filter (f => f.properties.name == h.etiqueta_gps)
+					.sort ( (a,b) => new Date(a.properties.ts) - new Date(b.properties.ts));
+			
+			for (let i=0;i<hPositions.length;i++){
+				hPositions[i].properties.order = i;
+				//hPositions[i].id = h.codigo_hermandad+''+i+''+Date.now();
+				if(i==0) h.lastPos = hPositions[i].geometry.coordinates;
+			}
+			dataWithOrder.features.push(...hPositions);
+		});
+		//console.log(JSON.stringify(dataWithOrder));	
+		if (lyGPS.getFeatures().length >0) lyGPS.clear();
+		lyGPS.setSource(dataWithOrder);
 	}).fail(function (e) {
 		showError(e.error);
 	});
@@ -394,15 +408,15 @@ $(document).ready(function () {
 
 function onDeviceReady() {
 	//JGL: actualización dinámica
-	updateLastPos().always(function () {
-		window.setInterval(updateLastPos, updateGPS * 1000);
-	});
 	$.when.apply($, [cargarDias(),
 		cargarHermandades(),
 		cargarPasos(),
 		cargarHermandadesRuta()
 	]).always(function () {
 		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
+		updateLastPos().always(function () {
+			window.setInterval(updateLastPos, updateGPS * 1000);
+		});
 		if (window.isApp) {
 			setTimeout(function () {
 				navigator.splashscreen.hide();

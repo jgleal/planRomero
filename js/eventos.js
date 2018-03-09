@@ -3,6 +3,7 @@ function bindEvents() {
 		if ($.type(data.toPage) == "object") {
 			switch (data.toPage[0].id) {
 				case "ruta":
+					establecerMapaGPSlayer(mapajsRuta);
 					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val()).done(
 						() => {
 							//mapajsRuta.refresh();
@@ -13,17 +14,22 @@ function bindEvents() {
 					break;
 				case "toponimo":
 					//mapajsTopo.refresh();
+					establecerMapaGPSlayer(mapajsTopo);
 					mapajsTopo.getMapImpl().updateSize();
+					let geolink = "geo:0,0?q="+transformar([data.options.topoX,data.options.topoY])+"("+data.options.topoNombre+")";
+					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
 					mapajsDiario.setBbox(lyRutaDiario.getFeaturesExtent());
+					establecerMapaGPSlayer(mapajsDiario);
 					//mapajsDiario.refresh();
 					mapajsDiario.getMapImpl().updateSize();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "gps":
+					establecerMapaGPSlayer(mapajsGPS);
 					updateLastPos().done(function () {
 						pintarGPS();
 						//JGL: si sólo se quiere pintar la hermandad seleccionada
@@ -36,11 +42,11 @@ function bindEvents() {
 				case "mapaOcupados":
 					//mapajsOcupados.refresh();
 					addCaminosOcupados(mapajsOcupados);
+					establecerMapaGPSlayer(mapajsOcupados);
 					mapajsOcupados.getMapImpl().updateSize();
 					if (!($("#mapaOcupados .m-location-container").hasClass("activated"))) {
 						$("#mapaOcupados button#m-location-button").click();
 					}
-
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
 					break;
 				default:
@@ -111,3 +117,5 @@ function bindEvents() {
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
 }
+
+
