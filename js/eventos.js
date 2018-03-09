@@ -35,6 +35,7 @@ function bindEvents() {
 					break;
 				case "mapaOcupados":
 					//mapajsOcupados.refresh();
+					addCaminosOcupados(mapajsOcupados);
 					mapajsOcupados.getMapImpl().updateSize();
 					if (!($("#mapaOcupados .m-location-container").hasClass("activated"))) {
 						$("#mapaOcupados button#m-location-button").click();

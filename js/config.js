@@ -24,7 +24,7 @@ const errCode = [2];
 const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se realiza en carreta"];
 const htmlAcercade = "<img src='img/logoJunta.png'/><br>Plan Romero 2017<br>Versión 1.0.0<br><br>Junta de Andalucía<br><a href='#' onclick='javascript:openInfo();'>Consejería de Justicia e Interior</a>";
 
-const codJornada = new Date().getHours() > 15? 2 : 1;
+const horaCambioJornada = 15;
 const urlWMSCaminosOcupados = 'http://www.cji.junta-andalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
 
 window.isApp = /^(?!HTTP)/.test(document.URL.toUpperCase()); //
@@ -38,7 +38,8 @@ var formatDate = function (date, format) {
 		
 		case "combo":
 		default:
-			return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+			//JGL: añado un 0 al mes ya que el servicio lo devuelve con 2 dígitos
+			return date.getDate() + "/0" + (date.getMonth()+1) + "/" + date.getFullYear();
 	}
 };
 

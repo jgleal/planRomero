@@ -95,8 +95,8 @@ let lyRutaDiario = new M.layer.GeoJSON({
 	hide: attrNotShow
 });
 
-function createMaps(){
-    mapajsRuta = M.map({
+function createMaps() {
+	mapajsRuta = M.map({
 		controls: ["location"],
 		container: "mapRuta",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
@@ -133,4 +133,20 @@ function createMaps(){
 		layers: [lyGPS],
 		wmcfiles: ["romero_mapa", "romero_satelite"]
 	});
+}
+
+function addCaminosOcupados(mapa) {
+	let dateHoy = new Date();
+	let codJornada = dateHoy.getHours() > horaCambioJornada? 2 : 1;
+	let hoy = dias.find(d => d.fecha == formatDate(dateHoy));
+	let codFecha = (hoy != undefined)? hoy.codigo_fecha : '';
+	let cqlOcupados = `CODIGO_JORNADA='${codJornada}' AND CODIGO_FECHA='${codFecha}`;
+	let lyCaminosOcupados = new M.layer.WMS({
+		url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
+		name: 'PlanRomero:JRFR_APP_TRAMOS',
+		legend: 'Ocupadas',
+		transparent: true,
+		tiled: false
+	});
+	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
 }

@@ -211,28 +211,15 @@ function cargarDiasPaso(idPaso) {
 function cargarDias() {
 	return getInfo(getDias).done(function (data) {
 		dias = data.dias_semana;
-		let cqlOcupados = "CODIGO_JORNADA='" + codJornada + "'";
 		$.each(dias, function (i, dia) {
 			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
 			if (dia.fecha == formatDate(new Date())) {
 				option.attr("selected", "selected");
-				cqlOcupados += " AND CODIGO_FECHA='" + dia.codigo_fecha + "'";
 			}
 			$("#dropDiaDiario").append(option);
 		});
 		//console.log(encodeURI(cqlOcupados));
 		cargarDiario($("#dropDiaDiario").val());
-
-		/*let lyCaminosOcupados = new M.layer.WMS({
-			url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
-			name: 'PlanRomero:JRFR_APP_TRAMOS',
-			legend: 'Ocupadas',
-			transparent: true,
-			tiled: false
-		});
-		mapajsOcupados.addLayers(lyCaminosOcupados);
-		*/
-		
 		
 	}).fail(function (e) {
 		showError(e.error);
