@@ -24,7 +24,7 @@ function informacionHermandad(idHermandad) {
 	//TODO: borrar test - OJO a target href
 	h.inf_adicional = {
 		"nombre": h.nombre,
-		"web": "<a href='http://google.com' target='_system'>http://google.com<a>",
+		"web": "http://google.com",
 		"descripción": "Lorem ipusum tururum",
 		"teléfono": "955955955"
 	};
@@ -32,6 +32,9 @@ function informacionHermandad(idHermandad) {
 	let tbodyTabla = $("#tablaHermandad tbody");
 	tbodyTabla.empty();
 	$.each(h.inf_adicional, function (key, val) {
+		if(/(www|http:|https:)+[^\s]+[\w]/.test(val))//es url
+			val = `<a href="#" onclick="javascript:openUrlExternal(${val});">${val}</a>`;
+		
 		let tr = $("<tr>").append($("<td>").html(key))
 			.append($("<td>").html(val));
 		tbodyTabla.append(tr);

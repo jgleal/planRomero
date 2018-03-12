@@ -38,6 +38,9 @@ function showError(e) {
     showDialog(errTxt, "ERROR", "error");
 }
 
+function openUrlExternal(url){
+    cordova.InAppBrowser.open(url, '_system');
+}
 function openInfo() {
-	cordova.InAppBrowser.open('http://www.juntadeandalucia.es/organismos/justiciaeinterior.html', '_system');
+	openUrlExternal('http://www.juntadeandalucia.es/organismos/justiciaeinterior.html');
 }

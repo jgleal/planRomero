@@ -23,7 +23,7 @@ const noPosicion = "No existe posición para la hermandad seleccionada";
 const errInesperado = "Ha ocurrido un error inesperado. Vuelva a ejecutar la aplicación";
 const errCode = [2];
 const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se realiza en carreta"];
-const htmlAcercade = "<img src='img/logoJunta.png'/><br>Plan Romero 2017<br>Versión 1.0.0<br><br>Junta de Andalucía<br><a href='#' onclick='javascript:openInfo();'>Consejería de Justicia e Interior</a>";
+const htmlAcercade = "<img src='img/logoJunta.png'/><br>Plan Romero 2017<br>Versión 1.0.0<br><br>Junta de Andalucía<br><a href=\"#\" onclick=\"javascript:openUrlExternal('http://www.juntadeandalucia.es/organismos/justiciaeinterior.html');\">Consejería de Justicia e Interior</a>";
 
 const horaCambioJornada = 15;
 const urlWMSCaminosOcupados = 'http://www.cji.junta-andalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
@@ -43,4 +43,3 @@ var formatDate = function (date, format) {
 			return date.getDate() + "/0" + (date.getMonth()+1) + "/" + date.getFullYear();
 	}
 };
-
