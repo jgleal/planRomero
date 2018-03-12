@@ -163,13 +163,21 @@ div.with_background {
   z-index: 9999999;
 }
 #iralli{
-  top: 5em;
-  left: 0.5em;
+  top: 4em;
+  left: 0.2em;
+  right: 0.2em;
   border-radius: 5px;
   font-weight: bold;
-  padding: 0.5em;
+  text-align: center;
+  padding: 0.3em;
   position: absolute;
   opacity: 0.8;
   background-color: rgb(207, 207, 204);
   z-index: 9999999;
+}
+#iralli a, #iralli a:visited, #iralli a:hover, #iralli a:active {
+  color: #0000EE;
+}
+#iralli p{
+  margin: 2px;
 }

@@ -16,7 +16,8 @@ function bindEvents() {
 					//mapajsTopo.refresh();
 					establecerMapaGPSlayer(mapajsTopo);
 					mapajsTopo.getMapImpl().updateSize();
-					let geolink = "geo:0,0?q="+transformar([data.options.topoX,data.options.topoY])+"("+data.options.topoNombre+")";
+					let geolink = "geo:0,0?q="+transformar([data.options.topoX,data.options.topoY]);
+					//geolink += "("+data.options.topoNombre+")"; //añadir etiqueta al mapa
 					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
@@ -104,12 +105,14 @@ function bindEvents() {
 		if ($(".star.fa").hasClass("fa-star")) {
 			guardarFavorita(hSel);
 			$("#dropHermandadCamino").val(hSel).change();
+			$("#dropHermandadRuta").val(hSel).change();			
 			if (h.gps)
 				$("#dropHermandadGps").val(hSel).change();
 			else
 				$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
 		} else if (hSel == hFav) { //desmarcando favorita
 			$("#dropHermandadCamino").val($("#dropHermandadCamino option:first").val()).change();
+			$("#dropHermandadRuta").val($("#dropHermandadRuta option:first").val()).change();
 			$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
 			guardarFavorita(null);
 		}
