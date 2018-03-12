@@ -33,7 +33,7 @@ function informacionHermandad(idHermandad) {
 	tbodyTabla.empty();
 	$.each(h.inf_adicional, function (key, val) {
 		if(/(www|http:|https:)+[^\s]+[\w]/.test(val))//es url
-			val = `<a href="#" onclick="javascript:openUrlExternal(${val});">${val}</a>`;
+			val = `<a href="#" onclick="javascript:openUrlExternal('${val}');">${val}</a>`;
 		
 		let tr = $("<tr>").append($("<td>").html(key))
 			.append($("<td>").html(val));
