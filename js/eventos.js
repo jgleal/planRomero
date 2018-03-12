@@ -16,8 +16,8 @@ function bindEvents() {
 					//mapajsTopo.refresh();
 					establecerMapaGPSlayer(mapajsTopo);
 					mapajsTopo.getMapImpl().updateSize();
-					let geolink = "geo:0,0?q="+transformar([data.options.topoX,data.options.topoY]);
-					//geolink += "("+data.options.topoNombre+")"; //añadir etiqueta al mapa
+					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
+					let geolink = `geo:${coordsGeo}?q=${coordsGeo}(${data.options.topoNombre})`;
 					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');

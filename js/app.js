@@ -24,7 +24,7 @@ function informacionHermandad(idHermandad) {
 	//TODO: borrar test - OJO a target href
 	h.inf_adicional = {
 		"nombre": h.nombre,
-		"web": "<a href='' target='_system'>http://google.com<a>",
+		"web": "<a href='http://google.com' target='_system'>http://google.com<a>",
 		"descripción": "Lorem ipusum tururum",
 		"teléfono": "955955955"
 	};
@@ -127,12 +127,17 @@ function cargarCamino(idHermandad) {
 	return getInfo(getCamino + idHermandad).done(function (data) {
 		listCamino.empty();
 		$("#msjCamino").hide();
+		
 		$.each(data.pasos, function (i, paso) {
+			//TODO: test borrar
+			paso.kms = (paso.y/paso.x).toFixed(2); 
+			//
 			let ul = listCamino.find("#" + paso.codigo_fecha);
-			if (ul.length == 1) {
+			if (ul.length == 1) { //si ya se ha creado el día se insertan ahí los pasos
 				ul = $(ul[0]);
 			} else {
-				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana + "</h1></div>");
+				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana 
+				+  "<span class='ui-li-count'>"+paso.kms+"kms</span></h1></div>");
 				ul = $("<ul data-role='listview' id='" + paso.codigo_fecha + "'></ul>");
 				div.append(ul);
 			}
@@ -145,7 +150,10 @@ function cargarCamino(idHermandad) {
 				"topoHermandad": $("#dropHermandadCamino option:selected").text()
 			};
 
-			let li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\"," + JSON.stringify(toponimo) + ")'>" + topoNombre + "</a><p class='ui-li-aside'><strong>" + texto_fecha[0] + "</strong></p></li>");
+			let li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\"," 
+								+ JSON.stringify(toponimo) + ")'>" 
+								+ topoNombre + "</a><p class='ui-li-aside'><strong>" 
+								+ texto_fecha[0] + "</strong></p></li>");
 			ul.append(li);
 			listCamino.append(div);
 		});

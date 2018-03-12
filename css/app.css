@@ -114,6 +114,9 @@ div.with_background {
     background-color: floralwhite !important;
     color: #000 !important; /*texto negro ya que cambia a blanco*/
 }
+.ui-li-count{
+  border-style: none !important;
+}
 .m-popup>div.m-content>div.m-body>div.m-geojson-content>div.result>table td.key {
   text-align: left !important;
 }
