@@ -24,7 +24,7 @@ function informacionHermandad(idHermandad) {
 	//TODO: borrar test - OJO a target href
 	h.inf_adicional = {
 		"nombre": h.nombre,
-		"web": "<a href='' target='_system'>http://web.com<a>",
+		"web": "<a href='' target='_system'>http://google.com<a>",
 		"descripción": "Lorem ipusum tururum",
 		"teléfono": "955955955"
 	};
