@@ -21,27 +21,34 @@ function informacionHermandad(idHermandad) {
 		$(".star.fa").removeClass("fa-star").addClass("fa-star-o");
 
 	let h = hermandades.getByField("codigo_hermandad", idHermandad);
-	//TODO: borrar test - OJO a target href
+	//TODO: borrar test
 	h.inf_adicional = {
 		"nombre": h.nombre,
 		"web": "http://google.com",
-		"descripción": "Lorem ipusum tururum",
+		"email": "mi@email.com",
+		"descripción": "Lorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururum",
 		"teléfono": "955955955"
 	};
 	//
 	let tbodyTabla = $("#tablaHermandad tbody");
 	tbodyTabla.empty();
 	$.each(h.inf_adicional, function (key, val) {
-		if(/(www|http:|https:)+[^\s]+[\w]/.test(val))//es url
+		if (/(www|http:|https:)+[^\s]+[\w]/.test(val)) //es url
 			val = `<a href="#" onclick="javascript:openUrlExternal('${val}');">${val}</a>`;
-		
-		let tr = $("<tr>").append($("<td>").html(key))
-			.append($("<td>").html(val));
-		tbodyTabla.append(tr);
+		else if (/^(\+34|0034|34)?[6|7|9][0-9]{8}$/.test(val)) //es teléfono
+			val = `<a href="tel:${val}">${val}</a>`;
+		else if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(val)) //es email
+			val = `<a href="mailto:${val}">${val}</a>`;
+
+		tbodyTabla.append($("<tr>")
+			.append($("<td>").html(key))
+			.append($("<td>").html(val)));
+
 	});
 }
+
 function guardarFavorita(idHermandad) {
-    localStorage.setItem("hermandadFavorita", idHermandad);
+	localStorage.setItem("hermandadFavorita", idHermandad);
 }
 
 function getInfo(url, filtro = {}, showLoading = true) {
@@ -130,17 +137,17 @@ function cargarCamino(idHermandad) {
 	return getInfo(getCamino + idHermandad).done(function (data) {
 		listCamino.empty();
 		$("#msjCamino").hide();
-		
+
 		$.each(data.pasos, function (i, paso) {
 			//TODO: test borrar
-			paso.kms = (paso.y/paso.x).toFixed(2); 
+			paso.kms = (paso.y / paso.x).toFixed(2);
 			//
 			let ul = listCamino.find("#" + paso.codigo_fecha);
 			if (ul.length == 1) { //si ya se ha creado el día se insertan ahí los pasos
 				ul = $(ul[0]);
 			} else {
-				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana 
-				+  "<span class='ui-li-count'>"+paso.kms+"kms</span></h1></div>");
+				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana +
+					"<span class='ui-li-count'>" + paso.kms + "kms</span></h1></div>");
 				ul = $("<ul data-role='listview' id='" + paso.codigo_fecha + "'></ul>");
 				div.append(ul);
 			}
@@ -153,10 +160,10 @@ function cargarCamino(idHermandad) {
 				"topoHermandad": $("#dropHermandadCamino option:selected").text()
 			};
 
-			let li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\"," 
-								+ JSON.stringify(toponimo) + ")'>" 
-								+ topoNombre + "</a><p class='ui-li-aside'><strong>" 
-								+ texto_fecha[0] + "</strong></p></li>");
+			let li = $("<li><a href='javascript:$.mobile.changePage(\"#toponimo\"," +
+				JSON.stringify(toponimo) + ")'>" +
+				topoNombre + "</a><p class='ui-li-aside'><strong>" +
+				texto_fecha[0] + "</strong></p></li>");
 			ul.append(li);
 			listCamino.append(div);
 		});
@@ -226,13 +233,12 @@ function cargarDias() {
 			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
 			if (dia.fecha == formatDate(new Date())) {
 				option.attr("selected", "selected");
-				
 			}
 			$("#dropDiaDiario").append(option);
 		});
 		//console.log(encodeURI(cqlOcupados));
 		cargarDiario($("#dropDiaDiario").val());
-		
+
 	}).fail(function (e) {
 		showError(e.error);
 	});
@@ -364,19 +370,19 @@ function updateLastPos() {
 	return getInfo(getGPS, filtro, false).done(function (data) {
 		let dataWithOrder = JSON.parse(JSON.stringify(data));
 		dataWithOrder.features = [];
-		hermandades.filter(h => h.gps).forEach (h => {
-			hPositions = data.features.filter (f => f.properties.name == h.etiqueta_gps)
-					.sort ( (a,b) => new Date(a.properties.ts) - new Date(b.properties.ts));
-			
-			for (let i=0;i<hPositions.length;i++){
+		hermandades.filter(h => h.gps).forEach(h => {
+			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
+				.sort((a, b) => new Date(a.properties.ts) - new Date(b.properties.ts));
+
+			for (let i = 0; i < hPositions.length; i++) {
 				hPositions[i].properties.order = i;
 				//hPositions[i].id = h.codigo_hermandad+''+i+''+Date.now();
-				if(i==0) h.lastPos = hPositions[i].geometry.coordinates;
+				if (i == 0) h.lastPos = hPositions[i].geometry.coordinates;
 			}
 			dataWithOrder.features.push(...hPositions);
 		});
 		//console.log(JSON.stringify(dataWithOrder));	
-		if (lyGPS.getFeatures().length >0) lyGPS.clear();
+		if (lyGPS.getFeatures().length > 0) lyGPS.clear();
 		lyGPS.setSource(dataWithOrder);
 	}).fail(function (e) {
 		showError(e.error);
@@ -435,5 +441,5 @@ function onDeviceReady() {
 		}
 	});
 	bindEvents();
-	createMaps();	
+	createMaps();
 }

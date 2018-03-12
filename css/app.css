@@ -62,6 +62,7 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: white;
 }
 
 div.with_background {
@@ -120,9 +121,13 @@ div.with_background {
 .m-popup>div.m-content>div.m-body>div.m-geojson-content>div.result>table td.key {
   text-align: left !important;
 }
-.m-wmcselector-container{
+.m-wmcselector-container, .m-scale-container{
    height: 21px!important;
 }
+#toponimo .m-panel.m-layerswitcher.collapsed {
+  margin-top: 110px;
+}
+
 /*bugs iOS*/
 .m-areas>div.m-area>div.m-panel.m-map-info{
   visibility: visible!important;
@@ -156,7 +161,7 @@ div.with_background {
 }
 #kmruta{
   top: 5.5em;
-  right: 1em;
+  left: 1em;
   border-radius: 5px;
   font-weight: bold;
   padding: 0.2em;
@@ -175,7 +180,7 @@ div.with_background {
   position: absolute;
   opacity: 0.8;
   background-color: rgb(207, 207, 204);
-  z-index: 9999999;
+  z-index: 9998; /*encima del mapa pero debajo de los controles*/
 }
 #iralli a, #iralli a:visited, #iralli a:hover, #iralli a:active {
   color: #0000EE;

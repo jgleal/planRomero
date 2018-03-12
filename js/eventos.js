@@ -14,12 +14,13 @@ function bindEvents() {
 					break;
 				case "toponimo":
 					//mapajsTopo.refresh();
+					
 					establecerMapaGPSlayer(mapajsTopo);
-					mapajsTopo.getMapImpl().updateSize();
 					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
 					let geolink = `geo:${coordsGeo}?q=${coordsGeo}(${data.options.topoNombre})`;
 					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
+					mapajsTopo.getMapImpl().updateSize();
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
@@ -119,6 +120,7 @@ function bindEvents() {
 	});
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
+
 }
 
 

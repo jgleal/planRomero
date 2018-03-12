@@ -39,8 +39,8 @@ function showError(e) {
 }
 
 function openUrlExternal(url){
+    //_system abre siempre en la misma pestaña del navegador 
+    // para evitar que se abra multiples veces lo mismo.
+    // Cambiar a _blank si se quiere abrir multiples pestañas.
     cordova.InAppBrowser.open(url, '_system');
-}
-function openInfo() {
-	openUrlExternal('http://www.juntadeandalucia.es/organismos/justiciaeinterior.html');
 }

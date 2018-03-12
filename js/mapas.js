@@ -34,7 +34,7 @@ let lyPois = new M.layer.GeoJSON({
 	hide: attrNotShow
 });
 let lyGPS = new M.layer.GeoJSON({
-	name: "GPS",
+	name: "Posición GPS carretas",
 	extract: false
 }, {
 	style: new M.style.Point({
@@ -77,7 +77,7 @@ let lyGPS = new M.layer.GeoJSON({
 	})
 });
 let lyRuta = new M.layer.GeoJSON({
-	name: "Ruta",
+	name: "Rutas",
 	extract: false
 }, {
 	style: new M.style.Line({
@@ -89,7 +89,7 @@ let lyRuta = new M.layer.GeoJSON({
 	hide: attrNotShow
 });
 let lyRutaDiario = new M.layer.GeoJSON({
-	name: "RutaDiario",
+	name: "Rutas",
 	extract: false
 }, {
 	style: new M.style.Line({
@@ -103,14 +103,14 @@ let lyRutaDiario = new M.layer.GeoJSON({
 
 function createMaps() {
 	mapajsRuta = M.map({
-		controls: ["location"],
+		controls: ["location","scale","layerswitcher"],
 		container: "mapRuta",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
 		layers: [lyRuta]
 	});
 
 	mapajsDiario = M.map({
-		controls: ["location"],
+		controls: ["location","scale","layerswitcher"],
 		container: "mapDiario",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
 		layers: [lyRutaDiario, lyPois]
@@ -118,7 +118,7 @@ function createMaps() {
 
 	
 	mapajsTopo = M.map({
-		controls: ["location"],
+		controls: ["location","scale","layerswitcher"],
 		container: "mapToponimo",
 		wmcfiles: ["romero_mapa", "romero_satelite"]
 	});
@@ -128,13 +128,13 @@ function createMaps() {
 	})[0].setStyle(poiStyle);
 	
 	mapajsOcupados = M.map({
-		controls: ["location"],
+		controls: ["location","scale","layerswitcher"],
 		container: "mapOcupados",
 		wmcfiles: ["romero_mapa", "romero_satelite"]
 	});
 
 	mapajsGPS = M.map({
-		controls: ["location"],
+		controls: ["location","scale","layerswitcher"],
 		container: "mapGPS",
 		wmcfiles: ["romero_mapa", "romero_satelite"],
 		layers: [lyGPS]
