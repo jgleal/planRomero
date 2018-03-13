@@ -26,6 +26,7 @@ const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se reali
 const urlCJI = 'http://www.juntadeandalucia.es/organismos/justiciaeinterior.html';
 const urlConsorcioHuelva= "http://www.cthu.es/";
 const urlConsorcioSevilla= "http://www.consorciotransportes-sevilla.com/";
+const urlPDF = "http://www.parlamentodeandalucia.es/webdinamica/portal-web-parlamento/pdf.do?tipodoc=coleccion&id=14380&cley=00";
 const versionApp = "Versión 1.0.0";
 const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
 						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de Justicia e Interior</a>
@@ -35,7 +36,7 @@ const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${version
 						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioSevilla}');">Consorcio de transportes de Sevilla</a>`;
 
 const horaCambioJornada = 15;
-const urlWMSCaminosOcupados = 'http://www.cji.junta-andalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
+const urlWMSCaminosOcupados = 'http://www.juntadeandalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
 
 window.isApp = /^(?!HTTP)/.test(document.URL.toUpperCase()); //
 window.iOS = /IPAD|IPHONE|IPOD/.test(navigator.userAgent.toUpperCase());

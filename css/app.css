@@ -159,6 +159,7 @@ div.with_background {
   font-size: 25px;
   padding: 0.15em
 }
+
 #kmruta{
   top: 5.5em;
   left: 1em;
@@ -188,4 +189,16 @@ div.with_background {
 }
 #iralli p{
   margin: 2px;
+}
+#descargaDoc{
+  bottom: 0.1em;
+  position: absolute;
+  left: 40%;
+  color: #3f3f3e;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 0.2em;
+}
+#descargaDoc .fa{
+  font-size: 50px;
 }
