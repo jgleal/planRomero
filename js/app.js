@@ -441,6 +441,8 @@ function onDeviceReady() {
 			}, 2000);
 		}
 	});
-	bindEvents();
 	createMaps();
+	bindEvents();
+	
+	
 }

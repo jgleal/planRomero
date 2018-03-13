@@ -144,6 +144,8 @@ function createMaps() {
 	});
 }
 
+
+
 function addCaminosOcupados(mapa) {
 	let dateHoy = new Date();
 	let codJornada = dateHoy.getHours() > horaCambioJornada? 2 : 1;
@@ -157,7 +159,7 @@ function addCaminosOcupados(mapa) {
 		transparent: true,
 		tiled: false
 	});
-	console.log(mapa);
+	
 	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
 }
 function establecerMapaGPSlayer(mapa){
