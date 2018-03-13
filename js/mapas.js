@@ -50,9 +50,9 @@ let lyGPS = new M.layer.GeoJSON({
 			},
 			opacity: function (feature){
 				if (feature.getAttribute("order")==0)//última posición
-					return 0.5;
+					return 0.7;
 				else
-					return 0.3; 
+					return 0.4; 
 			}
 		},
 		stroke: {
@@ -63,6 +63,8 @@ let lyGPS = new M.layer.GeoJSON({
 				if (feature.getAttribute("order")==0) //solo última posición
 				return feature.getAttribute("name") + "\n\r" +
 					formatDate(new Date(feature.getAttribute("ts")), "gps");
+				else 
+				return formatDate(new Date(feature.getAttribute("ts")), "gps");
 			},
 			font: "bold 9px arial",
 			offset: [0,-25],

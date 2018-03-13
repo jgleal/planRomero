@@ -125,7 +125,7 @@ function bindEvents() {
 	});
 	$("#descargaDoc").click(function () {
 		openUrlExternal(urlPDF);
-	});
+	});	
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
 	lyGPS.on(M.evt.LOAD, () => lyGPS.setFilter(filtroGPS));

@@ -10,7 +10,7 @@
   <link href="lib/jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
   <link href="lib/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
   <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-  <link href="css/app.css" rel="stylesheet" type="text/css" />  
+  <link href="css/app.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="cordova.js"></script>
   <script src="lib/jquery/jquery-1.12.1.min.js"></script>
   <script>
@@ -62,15 +62,10 @@
       <a class="ui-btn ui-icon-calendar ui-btn-icon-right" href="#diario">Movimiento diario</a>
       <a class="ui-btn ui-icon-clock ui-btn-icon-right" href="#horas">Paso de hermandades</a>
       <a class="ui-btn ui-icon-alert ui-btn-icon-right" href="#mapaOcupados">Caminos Ocupados</a>
-      <div id="descargaDoc">
-        <table>
-          <tr>
-            <td><span class="fa fa-file-text"></span></td>
-            <td><span>Descargar<br>Tríptico</span></td>
-          </tr>
-        </table>
-      </div>
+      <a id="descargaDoc" class="ui-btn ui-icon-arrow-d ui-btn-icon-right" href="#">Descarga Tríptico</a>
+
     </div>
+    
   </div>
   <!-- Page: hermandad  -->
   <div id="hermandad" data-role="page">
@@ -272,7 +267,10 @@
     </div>
     <div role="main" class="ui-content">
       <div id="iralli">
-        <p><a><span class="location-arrow fa fa-location-arrow"></span>Llévame allí</a></p>
+        <p>
+          <a>
+            <span class="location-arrow fa fa-location-arrow"></span>Llévame allí</a>
+        </p>
         <p>La ruta facilitada puede ser inprecisa</p>
       </div>
       <div id="mapToponimo" class="m-mapea-container"></div>
