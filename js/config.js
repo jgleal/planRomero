@@ -23,7 +23,16 @@ const noGPS = "Actualmente no existen posiciones GPS. Inténtelo más tarde";
 const errInesperado = "Ha ocurrido un error inesperado. Vuelva a ejecutar la aplicación";
 const errCode = [2];
 const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se realiza en carreta"];
-const htmlAcercade = "<img src='img/logoJunta.png'/><br>Plan Romero 2017<br>Versión 1.0.0<br><br>Junta de Andalucía<br><a href=\"#\" onclick=\"javascript:openUrlExternal('http://www.juntadeandalucia.es/organismos/justiciaeinterior.html');\">Consejería de Justicia e Interior</a>";
+const urlCJI = 'http://www.juntadeandalucia.es/organismos/justiciaeinterior.html';
+const urlConsorcioHuelva= "http://www.cthu.es/";
+const urlConsorcioSevilla= "http://www.consorciotransportes-sevilla.com/";
+const versionApp = "Versión 1.0.0";
+const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
+						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de Justicia e Interior</a>
+						<br>
+						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioHuelva}');">Consorcio de transportes de Huelva</a>
+						<br>
+						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioSevilla}');">Consorcio de transportes de Sevilla</a>`;
 
 const horaCambioJornada = 15;
 const urlWMSCaminosOcupados = 'http://www.cji.junta-andalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
