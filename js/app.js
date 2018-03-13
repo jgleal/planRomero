@@ -281,11 +281,8 @@ function pintarRuta(hermandad, dia) {
 
 	return getInfo(getRutas + hermandad, filtro).done(function (data) {
 		if (data.features.length > 0) {
-			console.log(data);
 			lyRuta.setSource(data);
-
-			//lyRuta.source = data;
-			//lyRuta.refresh();
+			
 			if (!$.isNumeric(dia) && dia != "completa") {
 				lyRuta.setFilter(M.filter.EQUAL("sentido", dia));
 				console.log("filtro", lyRuta.getFilter());
@@ -363,6 +360,7 @@ function pintarToponimo(data) {
 	mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
 }
 
+
 function updateLastPos() {
 	let filtro = {
 		"emp": "grea"
@@ -381,38 +379,40 @@ function updateLastPos() {
 			}
 			dataWithOrder.features.push(...hPositions);
 		});
-		//console.log(JSON.stringify(dataWithOrder));	
-		if (lyGPS.getFeatures().length > 0) lyGPS.clear();
+		//necesario ya que si la capa no está pintándose el setSource va añadiendo 
+		//al mapa las features sin eliminar anteriores
+		if (lyGPS.getFeatures().length > 0) lyGPS.clear(); 
 		lyGPS.setSource(dataWithOrder);
 	}).fail(function (e) {
 		showError(e.error);
 	});
 }
 
-function pintarGPS(hermandad) {
-	if (hermandad != null) { //por si se quiere sólo pintar una hermandad
-		lyGPS.setFilter(M.filter.EQUAL("codigo_hermandad", hermandad));
-	}
+/*function pintarGPS(hermandad) {
 	//centerGPS(hermandad);
 	let bbox = lyGPS.getFeatures().length > 0 ? lyGPS.getFeaturesExtent() : bboxContext;
 	mapajsGPS.setBbox(bbox);
-}
+}*/
 
 function centerGPS(idHermandad) { //0 para todas
+
 	if (idHermandad != 0) {
 		let h = hermandades.getByField("codigo_hermandad", idHermandad);
-		if (h != null && h.lastPos) {
-			mapajsGPS.setCenter(h.lastPos[0] + "," + h.lastPos[1]).setZoom(zoomToPoint);
-		} else if ($.mobile.activePage.attr('id') == 'gps') {
-			showDialog(noPosicion, "ERROR", "error");
-		}
-	} else if ($.mobile.activePage.attr('id') == 'gps') {
+		filtroGPS = M.filter.EQUAL("name", h.etiqueta_gps);
+	} else {
+		filtroGPS = M.filter.EQUAL("order", 0);
+	}
+	lyGPS.setFilter(filtroGPS);
+	setTimeout(() => {
 		if (lyGPS.getFeatures().length > 0) {
 			mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
-		} else {
+		}else if ($.mobile.activePage.attr('id') == 'gps'){
+			mapajsGPS.setBbox(bboxContext);
 			showDialog(noGPS, "ERROR", "error");
+			
 		}
-	}
+	}, 500);
+	
 }
 
 $(document).ready(function () {
@@ -432,6 +432,7 @@ function onDeviceReady() {
 	]).always(function () {
 		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
 		updateLastPos().always(function () {
+			
 			window.setInterval(updateLastPos, updateGPS * 1000);
 		});
 		if (window.isApp) {

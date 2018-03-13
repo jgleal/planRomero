@@ -18,8 +18,8 @@ const updateGPS = 15; //en segundos
 const timeout = 15; //en segundos. Se usa para detectar si hay algún problema con los servicios no controlado
 const attrNotShow = ["the_geom", "geom", "geometry", "color", "sentido"];
 /*********************** MENSAJES DE ERROR NO CONTROLADO EN LOS SERVICIOS **********************/
-const noGPS = "Actualmente no existen posiciones de las hermandades. Inténtelo más tarde";
-const noPosicion = "No existe posición para la hermandad seleccionada";
+const noGPS = "Actualmente no existen posiciones GPS. Inténtelo más tarde";
+/*const noPosicion = "No existe posición para la hermandad seleccionada";*/
 const errInesperado = "Ha ocurrido un error inesperado. Vuelva a ejecutar la aplicación";
 const errCode = [2];
 const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se realiza en carreta"];

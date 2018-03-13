@@ -3,6 +3,7 @@ function bindEvents() {
 		if ($.type(data.toPage) == "object") {
 			switch (data.toPage[0].id) {
 				case "ruta":
+					filtroGPS = M.filter.EQUAL("order",0);
 					establecerMapaGPSlayer(mapajsRuta);
 					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val()).done(
 						() => {
@@ -14,7 +15,7 @@ function bindEvents() {
 					break;
 				case "toponimo":
 					//mapajsTopo.refresh();
-					
+					filtroGPS = M.filter.EQUAL("order",0);
 					establecerMapaGPSlayer(mapajsTopo);
 					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
 					let geolink = `geo:${coordsGeo}?q=${coordsGeo}(${data.options.topoNombre})`;
@@ -24,6 +25,7 @@ function bindEvents() {
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
+					filtroGPS = M.filter.EQUAL("order",0);
 					mapajsDiario.setBbox(lyRutaDiario.getFeaturesExtent());
 					establecerMapaGPSlayer(mapajsDiario);
 					//mapajsDiario.refresh();
@@ -31,11 +33,13 @@ function bindEvents() {
 					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "gps":
+					/*if ($("#dropHermandadGPS").val()!= 0)
+						filtroGPS = M.filter.EQUAL("order",0);
+					else
+						filtroGPS = null;*/
 					establecerMapaGPSlayer(mapajsGPS);
 					updateLastPos().done(function () {
-						pintarGPS();
-						//JGL: si sólo se quiere pintar la hermandad seleccionada
-						//pintarGPS($("#dropHermandadGps").val());
+						centerGPS($("#dropHermandadGps").val());
 						//mapajsGPS.refresh();
 						mapajsGPS.getMapImpl().updateSize();
 						//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
@@ -86,7 +90,7 @@ function bindEvents() {
 	});
 	$("#dropHermandadRuta").on("change", function () {
 		cargarFechasHermandad($("#dropHermandadRuta").val()).done(function () {
-			$("#dropDiaRuta").selectmenu("refresh");
+			if ($.mobile.activePage.attr('id') == 'ruta') $("#dropDiaRuta").selectmenu("refresh");
 			pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
 		});
 	});
@@ -106,6 +110,7 @@ function bindEvents() {
 		if ($(".star.fa").hasClass("fa-star")) {
 			guardarFavorita(hSel);
 			$("#dropHermandadCamino").val(hSel).change();
+			
 			$("#dropHermandadRuta").val(hSel).change();			
 			if (h.gps)
 				$("#dropHermandadGps").val(hSel).change();
@@ -120,6 +125,8 @@ function bindEvents() {
 	});
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
+	lyGPS.on(M.evt.LOAD, () => lyGPS.setFilter(filtroGPS));
+	
 
 }
 

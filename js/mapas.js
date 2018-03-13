@@ -76,6 +76,7 @@ let lyGPS = new M.layer.GeoJSON({
 		}
 	})
 });
+let filtroGPS = M.filter.EQUAL("order",0);
 let lyRuta = new M.layer.GeoJSON({
 	name: "Rutas",
 	extract: false
