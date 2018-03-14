@@ -1,4 +1,3 @@
-M.proxy(false);
 let mapajsRuta, mapajsTopo, mapajsGPS, mapajsDiario, mapajsOcupados;
 let poiStyle = new M.style.Point({
 	radius: 6,
@@ -144,8 +143,6 @@ function createMaps() {
 	});
 }
 
-
-
 function addCaminosOcupados(mapa) {
 	let dateHoy = new Date();
 	let codJornada = dateHoy.getHours() > horaCambioJornada? 2 : 1;
@@ -155,13 +152,15 @@ function addCaminosOcupados(mapa) {
 	let lyCaminosOcupados = new M.layer.WMS({
 		url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
 		name: 'PlanRomero:JRFR_APP_TRAMOS',
-		legend: 'Ocupadas',
+		legend: 'Caminos Ocupados',
 		transparent: true,
 		tiled: false
 	});
 	
 	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
 }
+//para controlar que sólo está añadida al mapa actual visualizado
+//ya que mapea no permite una capa en varios mapas
 function establecerMapaGPSlayer(mapa){
 	lyGPS.getImpl().map.removeLayers([lyGPS]);
 	mapa.addLayers(lyGPS);

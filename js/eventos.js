@@ -11,7 +11,7 @@ function bindEvents() {
 							mapajsRuta.getMapImpl().updateSize();
 						}
 					);
-					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "toponimo":
 					//mapajsTopo.refresh();
@@ -22,7 +22,7 @@ function bindEvents() {
 					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
 					mapajsTopo.getMapImpl().updateSize();
-					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "mapaDiario":
 					filtroGPS = M.filter.EQUAL("order",0);
@@ -30,19 +30,15 @@ function bindEvents() {
 					establecerMapaGPSlayer(mapajsDiario);
 					//mapajsDiario.refresh();
 					mapajsDiario.getMapImpl().updateSize();
-					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
 				case "gps":
-					/*if ($("#dropHermandadGPS").val()!= 0)
-						filtroGPS = M.filter.EQUAL("order",0);
-					else
-						filtroGPS = null;*/
 					establecerMapaGPSlayer(mapajsGPS);
 					updateLastPos().done(function () {
 						centerGPS($("#dropHermandadGps").val());
 						//mapajsGPS.refresh();
 						mapajsGPS.getMapImpl().updateSize();
-						//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
+						if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
 					break;
 				case "mapaOcupados":
@@ -53,7 +49,7 @@ function bindEvents() {
 					if (!($("#mapaOcupados .m-location-container").hasClass("activated"))) {
 						$("#mapaOcupados button#m-location-button").click();
 					}
-					//if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
+					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
 					break;
 				default:
 					break;
@@ -98,8 +94,7 @@ function bindEvents() {
 		pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val());
 	});
 	$("#dropHermandadGps").on("change", function () {
-		//pintarGPS($(this).val()); //JGL: para sólo pintar la hermandad
-		centerGPS($(this).val().toString());
+		centerGPS($(this).val());
 	});
 
 	$("#tablaHermandad th").click(function () { //funcionalidad a toda la cabecera
@@ -135,7 +130,6 @@ function bindEvents() {
 	mapajsOcupados.on(M.evt.COMPLETED, () => mapajsOcupados.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
 	mapajsTopo.on(M.evt.COMPLETED, () => mapajsTopo.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
 	
-
 }
 
 

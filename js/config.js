@@ -14,7 +14,7 @@ const getColor = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/col
 /**/
 const bboxContext = {x:{min:96388,max:621889},y:{min:3959795,max:4299792}};
 const zoomToPoint = 12;
-const updateGPS = 15; //en segundos
+const updateGPS = 15; //en segundos. TODO:cambiar a 150 antes de publicar
 const timeout = 15; //en segundos. Se usa para detectar si hay algún problema con los servicios no controlado
 const attrNotShow = ["the_geom", "geom", "geometry", "color", "sentido"];
 /*********************** MENSAJES DE ERROR NO CONTROLADO EN LOS SERVICIOS **********************/
@@ -53,3 +53,4 @@ var formatDate = function (date, format) {
 			return date.getDate() + "/0" + (date.getMonth()+1) + "/" + date.getFullYear();
 	}
 };
+M.proxy(false);

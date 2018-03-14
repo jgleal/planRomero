@@ -1,4 +1,4 @@
-/***********variables globales********/
+/***********variables de uso global********/
 let dias = null;
 let hermandades = [];
 hermandades.getByField = function (field, value) {
@@ -12,7 +12,7 @@ hermandades.getByField = function (field, value) {
 hermandades.add = function (h) {
 	this.push.apply(this, h);
 };
-/*************************************/
+/****************************************/
 function informacionHermandad(idHermandad) {
 	let hFav = localStorage.getItem("hermandadFavorita");
 	if (hFav == idHermandad)
@@ -139,11 +139,11 @@ function cargarCamino(idHermandad) {
 		$("#msjCamino").hide();
 
 		$.each(data.pasos, function (i, paso) {
-			//TODO: test borrar
+			//TODO: borrar test
 			paso.kms = (paso.y / paso.x).toFixed(2);
 			//
 			let ul = listCamino.find("#" + paso.codigo_fecha);
-			if (ul.length == 1) { //si ya se ha creado el día se insertan ahí los pasos
+			if (ul.length == 1) { //si ya se ha creado el <ul>día se insertan ahí los pasos
 				ul = $(ul[0]);
 			} else {
 				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana +
@@ -174,7 +174,8 @@ function cargarCamino(idHermandad) {
 }
 
 function cargarDiario(idDia) {
-	//JGL: no puedo usar las hermandades ya consultadas poque la respuesta no tiene los días de paso.
+	//JGL: no puedo usar las hermandades ya consultadas poque la respuesta 
+	//no tiene los días de paso.
 	return getInfo(getHermandades, {
 		"codigo_fecha": idDia
 	}).done(function (data) {
@@ -236,7 +237,6 @@ function cargarDias() {
 			}
 			$("#dropDiaDiario").append(option);
 		});
-		//console.log(encodeURI(cqlOcupados));
 		cargarDiario($("#dropDiaDiario").val());
 
 	}).fail(function (e) {
@@ -278,14 +278,12 @@ function pintarRuta(hermandad, dia) {
 	let filtro = {};
 	if ($.isNumeric(dia)) filtro.codigo_fecha = dia;
 
-
 	return getInfo(getRutas + hermandad, filtro).done(function (data) {
 		if (data.features.length > 0) {
 			lyRuta.setSource(data);
 			
 			if (!$.isNumeric(dia) && dia != "completa") {
 				lyRuta.setFilter(M.filter.EQUAL("sentido", dia));
-				console.log("filtro", lyRuta.getFilter());
 			}
 
 			let kmsRuta = 0;
@@ -293,7 +291,7 @@ function pintarRuta(hermandad, dia) {
 				kmsRuta += f.getAttribute('kms');
 			});
 
-			//TODO borrar test
+			//TODO: borrar test
 			kmsRuta = lyRuta.getFeatures().length;
 			//
 			$("#kmruta").text(kmsRuta + "km");
@@ -338,7 +336,7 @@ function pintarMovimientoDiario(hermandad, dia) {
 	getInfo(getRutas + hermandad.codigo_hermandad, {
 		"codigo_fecha": dia
 	}).done(function (data) {
-		//lyRutaDiario.clear();
+		
 		if (data.features.length > 0) {
 			console.log("entro");
 			lyRutaDiario.setSource(data);
@@ -372,11 +370,9 @@ function updateLastPos() {
 			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
 				.sort((a, b) => new Date(a.properties.ts) - new Date(b.properties.ts));
 
-			for (let i = 0; i < hPositions.length; i++) {
+			for (let i = 0; i < hPositions.length; i++) 
 				hPositions[i].properties.order = i;
-				//hPositions[i].id = h.codigo_hermandad+''+i+''+Date.now();
-				if (i == 0) h.lastPos = hPositions[i].geometry.coordinates;
-			}
+				
 			dataWithOrder.features.push(...hPositions);
 		});
 		//necesario ya que si la capa no está pintándose el setSource va añadiendo 
@@ -388,12 +384,6 @@ function updateLastPos() {
 	});
 }
 
-/*function pintarGPS(hermandad) {
-	//centerGPS(hermandad);
-	let bbox = lyGPS.getFeatures().length > 0 ? lyGPS.getFeaturesExtent() : bboxContext;
-	mapajsGPS.setBbox(bbox);
-}*/
-
 function centerGPS(idHermandad) { //0 para todas
 
 	if (idHermandad != 0) {
@@ -403,6 +393,7 @@ function centerGPS(idHermandad) { //0 para todas
 		filtroGPS = M.filter.EQUAL("order", 0);
 	}
 	lyGPS.setFilter(filtroGPS);
+	//chapu para eviatar que los features sean 0 por asíncronía de mapea
 	setTimeout(() => {
 		if (lyGPS.getFeatures().length > 0) {
 			mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
@@ -424,7 +415,6 @@ $(document).ready(function () {
 });
 
 function onDeviceReady() {
-	//JGL: actualización dinámica
 	$.when.apply($, [cargarDias(),
 		cargarHermandades(),
 		cargarPasos(),
@@ -442,7 +432,5 @@ function onDeviceReady() {
 		}
 	});
 	createMaps();
-	bindEvents();
-	
-	
+	bindEvents();	
 }
