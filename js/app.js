@@ -36,7 +36,8 @@ function informacionHermandad(idHermandad) {
 		if (/(www|http:|https:)+[^\s]+[\w]/.test(val)) //es url
 			val = `<a href="#" onclick="javascript:openUrlExternal('${val}');">${val}</a>`;
 		else if (/^(\+34|0034|34)?[6|7|9][0-9]{8}$/.test(val)) //es teléfono
-			val = `<a href="tel:${val}">${val}</a>`;
+			//val = `<a href="tel:${val}">${val}</a>`;
+			val = `<a href="#" onclick="javascript:openUrlExternal('tel:${val}');">${val}</a>`;
 		else if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(val)) //es email
 			val = `<a href="mailto:${val}">${val}</a>`;
 
