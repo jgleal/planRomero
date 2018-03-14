@@ -166,23 +166,13 @@ function establecerMapaGPSlayer(mapa) {
 	mapa.addLayers(lyGPS);
 
 	if (window.iOS) {
-		//desactivo de todos los location ya que en iOS parece no poder
+		//desactivo todos los location ya que en iOS parece no poder
 		//compartir la ubicación con múltiples controles. 
-		mapajsOcupados.getControls({
-			name: 'location'
-		})[0].deactivate();
-		mapajsRuta.getControls({
-			name: 'location'
-		})[0].deactivate();
-		mapajsDiario.getControls({
-			name: 'location'
-		})[0].deactivate();
-		mapajsGPS.getControls({
-			name: 'location'
-		})[0].deactivate();
-		mapajsTopo.getControls({
-			name: 'location'
-		})[0].deactivate();
+		let arrMapas = [mapajsOcupados, mapajsRuta, mapajsDiario,mapajsGPS, mapajsTopo];
+		arrMapas.forEach(mapajs => {
+			let ctrlLoc = mapajs.getControls({name: 'location'})[0];
+			if(ctrlLoc.activated) ctrlLoc.deactivate();
+		});		
 	}
 }
 
