@@ -42,13 +42,11 @@ function bindEvents() {
 					});
 					break;
 				case "mapaOcupados":
-					//mapajsOcupados.refresh();
 					addCaminosOcupados(mapajsOcupados);
 					establecerMapaGPSlayer(mapajsOcupados);
+					//mapajsOcupados.refresh();
 					mapajsOcupados.getMapImpl().updateSize();
-					if (!($("#mapaOcupados .m-location-container").hasClass("activated"))) {
-						$("#mapaOcupados button#m-location-button").click();
-					}
+					mapajsOcupados.getControls({name:'location'})[0].activate();
 					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');					
 					break;
 				default:
