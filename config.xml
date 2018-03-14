@@ -16,6 +16,7 @@
 	<access origin="*" />
 	<access origin="tel:*" launch-external="yes"/>
 	<access origin="geo:*" launch-external="yes"/>
+	<access origin="maps:*" launch-external="yes"/>
 	<access origin="mailto:*" launch-external="yes"/>
 
 	<preference name="android-minSdkVersion" value="16"/>

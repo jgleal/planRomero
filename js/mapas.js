@@ -186,7 +186,7 @@ function transformar(arrCoords) {
 function getGeoLink(coords, label) {
 	if (window.isApp) {
 		if (window.iOS)
-			return `http://maps.apple.com?ll=${coords}&q=${label}`;
+			return `maps://?ll=${coords}&q=${label}`;
 		else
 			return `geo:${coords}?q=${coords}(${label})`;
 	} else
