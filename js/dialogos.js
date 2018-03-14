@@ -39,8 +39,12 @@ function showError(e) {
 }
 
 function openUrlExternal(url){
+    if (window.isApp){
     //_system abre siempre en la misma pestaña del navegador 
     // para evitar que se abra multiples veces lo mismo.
     // Cambiar a _blank si se quieren abrir multiples pestañas.
     cordova.InAppBrowser.open(url, '_system');
+    }else{
+        window.open(url,"_blank");
+    }
 }

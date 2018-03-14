@@ -281,11 +281,11 @@ function pintarRuta(hermandad, dia) {
 	return getInfo(getRutas + hermandad, filtro).done(function (data) {
 		if (data.features.length > 0) {
 			lyRuta.setSource(data);
+			//chapu para evitar asincronía de mapea
+			setTimeout(() => {
+				if (!$.isNumeric(dia)) setFilterRuta(dia);
+			}, 500);
 			
-			if (!$.isNumeric(dia) && dia != "completa") {
-				lyRuta.setFilter(M.filter.EQUAL("sentido", dia));
-			}
-
 			let kmsRuta = 0;
 			$.each(lyRuta.getFeatures(), function (i, f) {
 				kmsRuta += f.getAttribute('kms');
@@ -303,6 +303,14 @@ function pintarRuta(hermandad, dia) {
 		showError(e.error);
 	});
 }
+
+function setFilterRuta(sentido){ //contempla completa/ida/vuelta
+	if (sentido != "completa") {
+		lyRuta.setFilter(M.filter.EQUAL("sentido", sentido));
+	}else{
+		lyRuta.removeFilter();
+	}
+} 
 
 function pintarMovimientoDiario(hermandad, dia) {
 	getInfo(getCamino + hermandad.codigo_hermandad, {

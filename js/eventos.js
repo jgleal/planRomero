@@ -18,7 +18,7 @@ function bindEvents() {
 					filtroGPS = M.filter.EQUAL("order",0);
 					establecerMapaGPSlayer(mapajsTopo);
 					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
-					let geolink = `geo:${coordsGeo}?q=${coordsGeo}(${data.options.topoNombre})`;
+					let geolink = getGeoLink(coordsGeo,data.options.topoNombre);
 					$("#iralli a").attr("href",geolink);
 					pintarToponimo(data.options);
 					mapajsTopo.getMapImpl().updateSize();
@@ -117,6 +117,7 @@ function bindEvents() {
 			$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
 			guardarFavorita(null);
 		}
+		$("#dropDiaRuta").val($("#dropDiaRuta option:first").val()).change();
 	});
 	$("#descargaDoc").click(function () {
 		openUrlExternal(urlPDF);

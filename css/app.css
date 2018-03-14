@@ -169,7 +169,7 @@ div.with_background {
   position: absolute;
   opacity: 0.8;
   background-color: rgb(207, 207, 204);
-  z-index: 9999999;
+  z-index: 9998; /*encima del mapa pero debajo de los controles*/
 }
 #iralli{
   top: 4em;

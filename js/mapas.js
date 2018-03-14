@@ -172,3 +172,14 @@ function transformar(arrCoords){
 	coordTrans = proj4(epsg25830,epsg4326,arrCoords);
 	return coordTrans[1]+","+coordTrans[0];
 }
+
+function getGeoLink(coords,label){
+	if (window.isApp){
+		if (window.isIOS)
+			return `maps://?q:${coords}`;
+		else
+			return `geo:${coords}?q=${coords}(${label})`;
+	}else
+		return `http://maps.google.com?q=${coords}`;
+
+}
