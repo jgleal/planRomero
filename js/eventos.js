@@ -19,7 +19,6 @@ function bindEvents() {
 					establecerMapaGPSlayer(mapajsTopo);
 					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
 					let geolink = getGeoLink(coordsGeo,data.options.topoNombre);
-					//$("#iralli a").attr("href",geolink);
 					$("#iralli a").attr("onclick",`javascript:openUrlExternal('${geolink}');`);
 					pintarToponimo(data.options);
 					mapajsTopo.getMapImpl().updateSize();
