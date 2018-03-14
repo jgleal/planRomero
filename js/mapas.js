@@ -165,7 +165,7 @@ function establecerMapaGPSlayer(mapa) {
 	lyGPS.getImpl().map.removeLayers([lyGPS]);
 	mapa.addLayers(lyGPS);
 
-	if (window.isIOS) {
+	if (window.iOS) {
 		//desactivo de todos los location ya que en iOS parece no poder
 		//compartir la ubicación con múltiples controles. 
 		mapajsOcupados.getControls({
@@ -195,7 +195,7 @@ function transformar(arrCoords) {
 
 function getGeoLink(coords, label) {
 	if (window.isApp) {
-		if (window.isIOS)
+		if (window.iOS)
 			return `http://maps.apple.com?ll=${coords}&q=${label}`;
 		else
 			return `geo:${coords}?q=${coords}(${label})`;
