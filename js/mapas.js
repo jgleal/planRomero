@@ -164,7 +164,16 @@ function addCaminosOcupados(mapa) {
 function establecerMapaGPSlayer(mapa){
 	lyGPS.getImpl().map.removeLayers([lyGPS]);
 	mapa.addLayers(lyGPS);
-}
+
+	if (window.isIOS){
+		//desactivo de todos los location ya que en iOS parece no poder
+		//compartir la ubicación con múltiples controles. 
+		mapajsOcupados.getControls({name:'location'})[0].deactivate();
+		mapajsRuta.getControls({name:'location'})[0].deactivate();
+		mapajsDiario.getControls({name:'location'})[0].deactivate();
+		mapajsGPS.getControls({name:'location'})[0].deactivate();
+		mapajsTopo.getControls({name:'location'})[0].deactivate();
+	}
 
 function transformar(arrCoords){
 	var epsg4326 = proj4.defs('EPSG:4326');
@@ -176,7 +185,7 @@ function transformar(arrCoords){
 function getGeoLink(coords,label){
 	if (window.isApp){
 		if (window.isIOS)
-			return `maps://?q:${coords}`;
+			return `http://maps.apple.com?ll=${coords}&q=${label}`;
 		else
 			return `geo:${coords}?q=${coords}(${label})`;
 	}else
