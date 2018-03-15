@@ -108,6 +108,7 @@ div.with_background {
     background-color: #c0b997;
     color: #3f3f3e;
 }
+
 /***elimino estilos de seleccionado y activo ya que no interesan****/
 .ui-btn:hover,
 .ui-btn:active,
@@ -131,6 +132,12 @@ div.with_background {
 /*bugs iOS*/
 .m-areas>div.m-area>div.m-panel.m-map-info{
   visibility: visible!important;
+}
+/*con este cambio se eviata que no se muestre debido al bug de iOS11 con fixed, 
+  pero la leyenda al perder el atributo de fixed, 
+  si hay elementos por encima de ella no se muestra entera*/
+div.m-panel.m-layerswitcher.opened{
+  position: unset !important; 
 }
 /********************/
 #tablaHermandad {
