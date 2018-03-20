@@ -37,7 +37,7 @@ const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${version
 
 const horaCambioJornada = 15;
 const urlWMSCaminosOcupados = 'http://www.juntadeandalucia.es/justiciaeinterior/IDE-pru/PlanRomero/wms';
-const legendURL = "http://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png";
+const legendURL = "http://www.juntadeandalucia.es/justiciaeinterior/imgplan/LeyendaPRomero.png";
 window.isApp = /^(?!HTTP)/.test(document.URL.toUpperCase()); //
 window.iOS = /IPAD|IPHONE|IPOD/.test(navigator.userAgent.toUpperCase());
 var formatDate = function (date, format) {
