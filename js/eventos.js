@@ -135,11 +135,11 @@ function bindEvents() {
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
 	lyGPS.on(M.evt.LOAD, () => lyGPS.setFilter(filtroGPS));
-	mapajsGPS.on(M.evt.COMPLETED, () => mapajsGPS.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsRuta.on(M.evt.COMPLETED, () => mapajsRuta.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsDiario.on(M.evt.COMPLETED, () => mapajsDiario.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsOcupados.on(M.evt.COMPLETED, () => mapajsOcupados.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsTopo.on(M.evt.COMPLETED, () => mapajsTopo.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
+	mapajsGPS.on(M.evt.ADDED_WMS, () => mapajsGPS.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
+	mapajsRuta.on(M.evt.ADDED_WMS, () => mapajsRuta.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
+	mapajsDiario.on(M.evt.ADDED_WMS, () => mapajsDiario.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
+	mapajsOcupados.on(M.evt.ADDED_WMS, () => mapajsOcupados.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
+	mapajsTopo.on(M.evt.ADDED_WMS, () => mapajsTopo.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
 	
 }
 
