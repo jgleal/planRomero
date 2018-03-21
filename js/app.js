@@ -1,6 +1,11 @@
 /***********variables de uso global********/
 let dias = null;
 let hermandades = [];
+//fbma
+if (localStorage.getItem("hermandadFavorita") === null) {
+  localStorage.setItem("hermandadFavorita",null)
+}
+//fin fbma
 hermandades.getByField = function (field, value) {
 	for (let i = 0; i < this.length; i++) { //forEach no interrumpe con return
 		if (this[i][field] && this[i][field] != null &&
