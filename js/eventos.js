@@ -2,9 +2,15 @@ function bindEvents() {
 	$(document).on("pagechange", function (e, data) {
 		if ($.type(data.toPage) == "object") {
 			switch (data.toPage[0].id) {
+				// fbma	
+				case "hermandad":
+				    comprobarFavorita($("#dropHermandad"),false);
+				break;
+				// fin fbma
 				case "ruta":
 					filtroGPS = M.filter.EQUAL("order",0);
 					establecerMapaGPSlayer(mapajsRuta);
+					comprobarFavorita($("#dropHermandadRuta"),false);//fbma
 					pintarRuta($("#dropHermandadRuta").val(), $("#dropDiaRuta").val()).done(
 						() => {
 							//mapajsRuta.refresh();
@@ -13,6 +19,11 @@ function bindEvents() {
 					);
 					if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					break;
+				// fbma	
+				case "camino":
+				    comprobarFavorita($("#dropHermandadCamino"),false);
+				    break;
+				// fin fbma
 				case "toponimo":
 					//mapajsTopo.refresh();
 					filtroGPS = M.filter.EQUAL("order",0);
@@ -34,6 +45,7 @@ function bindEvents() {
 					break;
 				case "gps":
 					establecerMapaGPSlayer(mapajsGPS);
+					comprobarFavorita($("#dropHermandadGps"),true);//fbma
 					updateLastPos().done(function () {
 						centerGPS($("#dropHermandadGps").val());
 						//mapajsGPS.refresh();

@@ -51,6 +51,24 @@ function guardarFavorita(idHermandad) {
 	localStorage.setItem("hermandadFavorita", idHermandad);
 }
 
+// fbma
+function comprobarFavorita(drop, gps){
+    let hFav = localStorage.getItem("hermandadFavorita");
+    let h = hermandades.getByField("codigo_hermandad", hFav);
+    if(hFav !== 'null'){
+        if(gps){
+            if (h.gps)
+		        drop.val(hFav).change();
+	        else
+		        drop.val($("#dropHermandadGps option:first").val()).change();
+        
+        } else {
+            drop.val(hFav).change();
+        }
+    }	
+}
+// fin fbma
+
 function getInfo(url, filtro = {}, showLoading = true) {
 	showLoading && $.mobile.loading().show();
 	filtro.apikey = apikey;
