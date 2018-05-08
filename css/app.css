@@ -143,6 +143,7 @@ div.m-panel.m-layerswitcher.opened{
 #tablaHermandad {
   border-collapse: collapse;
   width: 100%;
+  font-size:4vw; 
 }
 #tablaHermandad th {
   padding-top: 3px;
@@ -154,7 +155,6 @@ div.m-panel.m-layerswitcher.opened{
 #tablaHermandad td, #datoshermandad th {
   border: 1px solid #ddd;
   padding: 8px;
-  font-size: 3.5vw;  
 }
 #tablaHermandad td:nth-child(1) {  
   font-weight: bold;
@@ -164,7 +164,7 @@ div.m-panel.m-layerswitcher.opened{
 #tablaHermandad tr:nth-child(even){background-color: #c0b997;}
 #tablaHermandad tr:nth-child(odd){background-color: floralwhite;}
 .star, .location-arrow{
-  font-size: 25px;
+  font-size: 5vw;
   padding: 0.15em
 }
 
