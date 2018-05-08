@@ -154,6 +154,7 @@ div.m-panel.m-layerswitcher.opened{
 #tablaHermandad td, #datoshermandad th {
   border: 1px solid #ddd;
   padding: 8px;
+  font-size: 3.5vw;  
 }
 #tablaHermandad td:nth-child(1) {  
   font-weight: bold;
