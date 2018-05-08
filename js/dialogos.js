@@ -34,6 +34,7 @@ function showInfo() {
 }
 
 function showError(e) {
+    console.log(e);
     errTxt = errMsg[errCode.indexOf(e.codigo)] || e.mensaje;
     showDialog(errTxt, "ERROR", "error");
 }

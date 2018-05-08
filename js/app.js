@@ -3,7 +3,7 @@ let dias = null;
 let hermandades = [];
 //fbma
 if (localStorage.getItem("hermandadFavorita") === null) {
-  localStorage.setItem("hermandadFavorita",null)
+	localStorage.setItem("hermandadFavorita", null)
 }
 //fin fbma
 hermandades.getByField = function (field, value) {
@@ -25,18 +25,9 @@ function informacionHermandad(idHermandad) {
 	else
 		$(".star.fa").removeClass("fa-star").addClass("fa-star-o");
 
-	let h = hermandades.getByField("codigo_hermandad", idHermandad);
-	//TODO: borrar test
-	h.inf_adicional = {
-		"nombre": h.nombre,
-		"web": "http://google.com",
-		"email": "mi@email.com",
-		"descripción": "Lorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururumLorem ipusum tururum",
-		"teléfono": "955955955"
-	};
-	//
 	let tbodyTabla = $("#tablaHermandad tbody");
 	tbodyTabla.empty();
+	let h = hermandades.getByField("codigo_hermandad", idHermandad);
 	$.each(h.inf_adicional, function (key, val) {
 		if (/(www|http:|https:)+[^\s]+[\w]/.test(val)) //es url
 			val = `<a href="#" onclick="javascript:openUrlExternal('${val}');">${val}</a>`;
@@ -46,7 +37,7 @@ function informacionHermandad(idHermandad) {
 			val = `<a href="#" onclick="javascript:openUrlExternal('mailto:${val}');">${val}</a>`;
 
 		tbodyTabla.append($("<tr>")
-			.append($("<td>").html(key))
+			.append($("<td>").html(key.replace("_", " ")))
 			.append($("<td>").html(val)));
 
 	});
@@ -56,21 +47,38 @@ function guardarFavorita(idHermandad) {
 	localStorage.setItem("hermandadFavorita", idHermandad);
 }
 
-// fbma
-function comprobarFavorita(drop, gps){
-    let hFav = localStorage.getItem("hermandadFavorita");
-    let h = hermandades.getByField("codigo_hermandad", hFav);
-    if(hFav !== 'null'){
-        if(gps){
-            if (h.gps)
-		        drop.val(hFav).change();
-	        else
-		        drop.val($("#dropHermandadGps option:first").val()).change();
-        
-        } else {
-            drop.val(hFav).change();
-        }
-    }	
+
+function seleccionarFavorita(hSel) {
+
+	if (hSel !== 'null' && hSel !== null) {
+		let h = hermandades.getByField("codigo_hermandad", hSel);
+		$("#dropHermandadCamino").val(hSel).change();
+		$("#dropHermandadRuta").val(hSel).change();
+		if (h.gps)
+			$("#dropHermandadGps").val(hSel).change();
+		else
+			$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
+	} else {
+		$("#dropHermandadCamino").val($("#dropHermandadCamino option:first").val()).change();
+		$("#dropHermandadRuta").val($("#dropHermandadRuta option:first").val()).change();
+		$("#dropHermandadGps").val($("#dropHermandadGps option:first").val()).change();
+	}
+}
+
+function comprobarFavorita(drop, gps) {
+	let hFav = localStorage.getItem("hermandadFavorita");
+	let h = hermandades.getByField("codigo_hermandad", hFav);
+	if (hFav !== 'null') {
+		if (gps) {
+			if (h.gps)
+				drop.val(hFav);
+			else
+				drop.val($("#dropHermandadGps option:first").val()).change();
+
+		} else {
+			drop.val(hFav).change();
+		}
+	}
 }
 // fin fbma
 
@@ -160,17 +168,23 @@ function cargarCamino(idHermandad) {
 	return getInfo(getCamino + idHermandad).done(function (data) {
 		listCamino.empty();
 		$("#msjCamino").hide();
+		//calculo de kms por fecha
+		let kmsPorFecha = data.pasos.reduce((p1, p2) => {
+			elem = (p1[p2["codigo_fecha"]] = p1[p2["codigo_fecha"]] || []);
+			if (elem.length == 0) elem.push(p2.km || 0);
+			else elem[0] += p2.km;
 
+			return p1;
+		},{});
+		//
 		$.each(data.pasos, function (i, paso) {
-			//TODO: borrar test
-			paso.kms = (paso.y / paso.x).toFixed(2);
-			//
+			
 			let ul = listCamino.find("#" + paso.codigo_fecha);
 			if (ul.length == 1) { //si ya se ha creado el <ul>día se insertan ahí los pasos
 				ul = $(ul[0]);
 			} else {
 				var div = $("<div data-role='collapsible'><h1>" + paso.dia_semana +
-					"<span class='ui-li-count'>" + paso.kms + "kms</span></h1></div>");
+					"<span class='ui-li-count'>" + kmsPorFecha[paso.codigo_fecha][0].toFixed(2) + " km</span></h1></div>");
 				ul = $("<ul data-role='listview' id='" + paso.codigo_fecha + "'></ul>");
 				div.append(ul);
 			}
@@ -304,20 +318,15 @@ function pintarRuta(hermandad, dia) {
 	return getInfo(getRutas + hermandad, filtro).done(function (data) {
 		if (data.features.length > 0) {
 			lyRuta.setSource(data);
+			let kmsRuta = 0;
 			//chapu para evitar asincronía de mapea
 			setTimeout(() => {
 				if (!$.isNumeric(dia)) setFilterRuta(dia);
+				$.each(lyRuta.getFeatures(), function (i, f) {
+					kmsRuta += f.getAttribute('kms');
+				});
+				$("#kmruta").text(kmsRuta.toFixed(2) + " km");
 			}, 500);
-			
-			let kmsRuta = 0;
-			$.each(lyRuta.getFeatures(), function (i, f) {
-				kmsRuta += f.getAttribute('kms');
-			});
-
-			//TODO: borrar test
-			kmsRuta = lyRuta.getFeatures().length;
-			//
-			$("#kmruta").text(kmsRuta + "km");
 		} else {
 			//JGL: no debería ocurrir
 			showDialog("El trayecto seleccionado no tiene elementos", "INFORMACIÓN", "warning");
@@ -327,13 +336,13 @@ function pintarRuta(hermandad, dia) {
 	});
 }
 
-function setFilterRuta(sentido){ //contempla completa/ida/vuelta
+function setFilterRuta(sentido) { //contempla completa/ida/vuelta
 	if (sentido != "completa") {
 		lyRuta.setFilter(M.filter.EQUAL("sentido", sentido));
-	}else{
+	} else {
 		lyRuta.removeFilter();
 	}
-} 
+}
 
 function pintarMovimientoDiario(hermandad, dia) {
 	getInfo(getCamino + hermandad.codigo_hermandad, {
@@ -367,9 +376,8 @@ function pintarMovimientoDiario(hermandad, dia) {
 	getInfo(getRutas + hermandad.codigo_hermandad, {
 		"codigo_fecha": dia
 	}).done(function (data) {
-		
+
 		if (data.features.length > 0) {
-			console.log("entro");
 			lyRutaDiario.setSource(data);
 			$("#mapaDiario .subheader").text(hermandad.nombre + " - " +
 				$("#dropDiaDiario option:selected").text());
@@ -389,52 +397,51 @@ function pintarToponimo(data) {
 	mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
 }
 
-
-function updateLastPos() {
+function updateLastPos(showLoading) {
 	let filtro = {
 		"emp": "grea"
 	};
-	return getInfo(getGPS, filtro, false).done(function (data) {
+	let idHermandad = $("#dropHermandadGps").val();
+	if ($.mobile.activePage.attr('id') == 'gps') {
+		if (idHermandad != 0) {
+			filtro.etiqueta_gps = hermandades.getByField("codigo_hermandad", idHermandad).etiqueta_gps;
+		} else {
+			filtro.tiempo = -1;
+		}
+	} else {
+		filtro.tiempo = -1;
+	}
+
+	return getInfo(getGPS, filtro, (showLoading || false)).done(function (data) {
 		let dataWithOrder = JSON.parse(JSON.stringify(data));
 		dataWithOrder.features = [];
 		hermandades.filter(h => h.gps).forEach(h => {
 			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
 				.sort((a, b) => new Date(a.properties.ts) - new Date(b.properties.ts));
 
-			for (let i = 0; i < hPositions.length; i++) 
+			for (let i = 0; i < hPositions.length; i++)
 				hPositions[i].properties.order = i;
-				
+
 			dataWithOrder.features.push(...hPositions);
 		});
+		//console.log(dataWithOrder);
 		//necesario ya que si la capa no está pintándose el setSource va añadiendo 
 		//al mapa las features sin eliminar anteriores
-		if (lyGPS.getFeatures().length > 0) lyGPS.clear(); 
+		if (lyGPS.getFeatures().length > 0) lyGPS.clear();
 		lyGPS.setSource(dataWithOrder);
 	}).fail(function (e) {
+		//console.log("FAIL", e);
 		showError(e.error);
 	});
 }
 
-function centerGPS(idHermandad) { //0 para todas
-
-	if (idHermandad != 0) {
-		let h = hermandades.getByField("codigo_hermandad", idHermandad);
-		filtroGPS = M.filter.EQUAL("name", h.etiqueta_gps);
-	} else {
-		filtroGPS = M.filter.EQUAL("order", 0);
+function centerGPS() {
+	if (lyGPS.getFeatures().length > 0) {
+		mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
+	} else if ($.mobile.activePage.attr('id') == 'gps') {
+		mapajsGPS.setBbox(bboxContext);
+		showDialog(noGPS, "ERROR", "error");
 	}
-	lyGPS.setFilter(filtroGPS);
-	//chapu para eviatar que los features sean 0 por asíncronía de mapea
-	setTimeout(() => {
-		if (lyGPS.getFeatures().length > 0) {
-			mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
-		}else if ($.mobile.activePage.attr('id') == 'gps'){
-			mapajsGPS.setBbox(bboxContext);
-			showDialog(noGPS, "ERROR", "error");
-			
-		}
-	}, 500);
-	
 }
 
 $(document).ready(function () {
@@ -453,7 +460,7 @@ function onDeviceReady() {
 	]).always(function () {
 		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
 		updateLastPos().always(function () {
-			
+
 			window.setInterval(updateLastPos, updateGPS * 1000);
 		});
 		if (window.isApp) {
@@ -463,5 +470,5 @@ function onDeviceReady() {
 		}
 	});
 	createMaps();
-	bindEvents();	
+	bindEvents();
 }
