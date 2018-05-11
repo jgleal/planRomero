@@ -81,7 +81,8 @@ function comprobarFavorita(drop, gps) {
 	}
 }
 // fin fbma
-
+let lastPosXHR = null;
+let fnCallback = null;
 function getInfo(url, filtro = {}, showLoading = true) {
 	showLoading && $.mobile.loading().show();
 	filtro.apikey = apikey;
@@ -89,20 +90,35 @@ function getInfo(url, filtro = {}, showLoading = true) {
 		dataType: "jsonp",
 		url: url,
 		timeout: timeout * 1000,
-		data: filtro
+		data: filtro,
+		beforeSend: function(jqXHR){
+			if (url===getGPS){
+				if (lastPosXHR!=null){
+					//console.log(lastPosXHR);				
+					lastPosXHR.abort();					
+				}
+				lastPosXHR = jqXHR;
+				fnCallback = this.jsonpCallback;
+				
+			} 
+		}
 	}).then(function (data, textStatus, jqXHR) {
+		
 		if (data.error) {
 			data.peticion = $(this)[0].url;
 			return $.Deferred().reject(data);
 		} else {
 			return data;
 		}
-	}).fail(function (e) {
+	}).fail(function (e) {		
 		//Captura de error genérica para todas las llamadas
 		//console.error(e.peticion, e.error);
-		if (e.statusText) { //ES UN ERROR NO CONTROLADO
+		if (e.statusText==="abort"){
+			window[fnCallback]=function (){};
+		}else if (e.statusText){//ES UN ERROR NO CONTROLADO
+			//console.log(e);
 			showDialog(errInesperado, "ERROR INESPERADO", "error");
-		}
+		}		
 	}).always(function () {
 		$.mobile.loading().hide();
 	});
@@ -175,10 +191,10 @@ function cargarCamino(idHermandad) {
 			else elem[0] += p2.km;
 
 			return p1;
-		},{});
+		}, {});
 		//
 		$.each(data.pasos, function (i, paso) {
-			
+
 			let ul = listCamino.find("#" + paso.codigo_fecha);
 			if (ul.length == 1) { //si ya se ha creado el <ul>día se insertan ahí los pasos
 				ul = $(ul[0]);
@@ -290,7 +306,7 @@ function cargarFechasHermandad(idHermandad) {
 		let opVuelta = $("<option value='vuelta'>Vuelta</option>");
 		$("#dropDiaRuta").append(opCompleta);
 
-		dias = data.dias_semana;
+		let dias = data.dias_semana;
 		let ida = false;
 		let vuelta = false;
 		$.each(dias, function (i, dia) {
@@ -396,7 +412,10 @@ function pintarToponimo(data) {
 	$("#toponimo .subheader").text(data.topoHermandad);
 	mapajsTopo.setCenter(data.topoX + "," + data.topoY + "*true").setZoom(zoomToPoint);
 }
-
+/*function paginaActualConMapa(){
+	let paginaActual = $.mobile.activePage.attr('id');
+	return (["ruta", "toponimo","mapaDiario","gps","mapaOcupados"].indexOf(paginaActual)>0);
+}*/
 function updateLastPos(showLoading) {
 	let filtro = {
 		"emp": "grea"
@@ -433,6 +452,7 @@ function updateLastPos(showLoading) {
 		//console.log("FAIL", e);
 		showError(e.error);
 	});
+
 }
 
 function centerGPS() {

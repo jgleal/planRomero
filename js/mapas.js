@@ -148,10 +148,10 @@ function addCaminosOcupados(mapa) {
 	let codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
 	let hoy = dias.find(d => d.fecha == formatDate(dateHoy));
 	let codFecha = (hoy != undefined) ? hoy.codigo_fecha : 0;
-	let cqlOcupados = `CODIGO_JORNADA='${codJornada}' AND CODIGO_FECHA='${codFecha}'`;
+	let cqlOcupados = `JORN_CO_CODIGO='${codJornada}' AND FECH_CO_CODIGO='${codFecha}'`;
 	let lyCaminosOcupados = new M.layer.WMS({
 		url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
-		name: 'PlanRomero:JRFR_APP_TRAMOS',
+		name: capaCaminosOcupados,
 		legend: 'Caminos Ocupados',
 		transparent: true,
 		tiled: false

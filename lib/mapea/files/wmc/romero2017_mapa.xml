@@ -166,7 +166,7 @@
 				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/justiciaeinterior/IDE/wms?"/>
 			</Server>
 			<Name>PlanRomero:PlanRomero</Name>
-			<Title>Plan Romero 2015</Title>
+			<Title>Plan Romero</Title>
 			<SRS>EPSG:25830</SRS>
 			<FormatList>
 				<Format current="1">image/png; mode=8bit</Format>
