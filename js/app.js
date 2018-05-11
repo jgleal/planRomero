@@ -83,6 +83,7 @@ function comprobarFavorita(drop, gps) {
 // fin fbma
 let lastPosXHR = null;
 let fnCallback = null;
+
 function getInfo(url, filtro = {}, showLoading = true) {
 	showLoading && $.mobile.loading().show();
 	filtro.apikey = apikey;
@@ -91,34 +92,34 @@ function getInfo(url, filtro = {}, showLoading = true) {
 		url: url,
 		timeout: timeout * 1000,
 		data: filtro,
-		beforeSend: function(jqXHR){
-			if (url===getGPS){
-				if (lastPosXHR!=null){
+		beforeSend: function (jqXHR) {
+			if (url === getGPS) {
+				if (lastPosXHR != null) {
 					//console.log(lastPosXHR);				
-					lastPosXHR.abort();					
+					lastPosXHR.abort();
 				}
 				lastPosXHR = jqXHR;
 				fnCallback = this.jsonpCallback;
-				
-			} 
+
+			}
 		}
 	}).then(function (data, textStatus, jqXHR) {
-		
+
 		if (data.error) {
 			data.peticion = $(this)[0].url;
 			return $.Deferred().reject(data);
 		} else {
 			return data;
 		}
-	}).fail(function (e) {		
+	}).fail(function (e) {
 		//Captura de error genérica para todas las llamadas
 		//console.error(e.peticion, e.error);
-		if (e.statusText==="abort"){
-			window[fnCallback]=function (){};
-		}else if (e.statusText){//ES UN ERROR NO CONTROLADO
+		if (e.statusText === "abort") {
+			window[fnCallback] = function () {};
+		} else if (e.statusText) { //ES UN ERROR NO CONTROLADO
 			//console.log(e);
 			showDialog(errInesperado, "ERROR INESPERADO", "error");
-		}		
+		}
 	}).always(function () {
 		$.mobile.loading().hide();
 	});
@@ -435,8 +436,16 @@ function updateLastPos(showLoading) {
 		let dataWithOrder = JSON.parse(JSON.stringify(data));
 		dataWithOrder.features = [];
 		hermandades.filter(h => h.gps).forEach(h => {
+			
+			//añado orden a las posiciones
 			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
 				.sort((a, b) => new Date(b.properties.ts) - new Date(a.properties.ts));
+
+			//elimino duplicadas (misma hora)
+			hPositions = hPositions.filter((h, index, self) =>
+				index === self.findIndex( h2 => (
+					h2.properties.ts === h.properties.ts
+				)));
 
 			for (let i = 0; i < hPositions.length; i++)
 				hPositions[i].properties.order = i;
