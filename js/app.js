@@ -436,7 +436,7 @@ function updateLastPos(showLoading) {
 		dataWithOrder.features = [];
 		hermandades.filter(h => h.gps).forEach(h => {
 			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
-				.sort((a, b) => new Date(a.properties.ts) - new Date(b.properties.ts));
+				.sort((a, b) => new Date(b.properties.ts) - new Date(a.properties.ts));
 
 			for (let i = 0; i < hPositions.length; i++)
 				hPositions[i].properties.order = i;
