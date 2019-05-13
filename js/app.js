@@ -512,4 +512,7 @@ function onDeviceReady() {
 	createMaps();
 	bindEvents();
 	generarDocs();
+	const dateHoy = new Date();
+	const codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
+	$("input[name='jornadaCamino'][value="+ codJornada + "]").prop("checked", true);	
 }
