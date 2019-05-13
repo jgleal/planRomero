@@ -1,15 +1,16 @@
 const apikey = "pl4n06";
 /************************************** SERVICIOS ****************************************/
-const getHermandades = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/hermandades/";
-const getDias = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/fechas/";
-const getRutas = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/ruta/";
-const getFechas = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/fechas/";
-const getCamino = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/camino/";
-const getPasos = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/pasos/";
-const getFechasPaso = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/fechas/paso/";
-const getHoras = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/horario/";
-const getGPS = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/gps/";
-const getColor = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/color/"; //NO USADO
+const entorno = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/";
+const getHermandades = entorno + "hermandades/";
+const getDias = entorno + "fechas/";
+const getRutas = entorno + "ruta/";
+const getFechas = entorno + "fechas/";
+const getCamino = entorno + "camino/";
+const getPasos = entorno + "pasos/";
+const getFechasPaso = entorno + "fechas/paso/";
+const getHoras = entorno + "horario/";
+const getGPS = entorno + "gps/";
+const getColor = entorno + "color/"; //NO USADO
 /**/
 const bboxContext = {x:{min:96388,max:621889},y:{min:3959795,max:4299792}};
 const zoomToPoint = 12;
