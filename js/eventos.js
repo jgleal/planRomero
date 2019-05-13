@@ -45,7 +45,9 @@ function bindEvents() {
 					updateLastPos(false).done(function () {
 						if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
-					addCaminosOcupados(mapajsOcupados);
+					addCaminosOcupados(mapajsOcupados, 
+						$("#dropDiaDiarioCamino").val(),
+						$("input[name='jornadaCamino']").val());
 					establecerMapaGPSlayer(mapajsOcupados);
 					//mapajsOcupados.refresh();
 					mapajsOcupados.getMapImpl().updateSize();
@@ -68,6 +70,16 @@ function bindEvents() {
 		cargarDiario($(this).val()).done(function () {
 			$("#listDiario").listview("refresh");
 		});
+	});
+	$("#dropDiaDiarioCamino").on("change", function () {
+		addCaminosOcupados(mapajsOcupados, 
+			$(this).val(),
+			$("input[name='jornadaCamino']").val());
+	});
+	$("input[name='jornadaCamino']").on("change", function () {
+		addCaminosOcupados(mapajsOcupados, 
+			$("#dropDiarioCamino").val(),
+			$(this).val());
 	});
 	$("#dropPasos").on("change", function () {
 		cargarDiasPaso($(this).val()).done(

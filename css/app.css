@@ -40,9 +40,14 @@ a:visited    {color:#3f3f3e; font-weight: bold}
   top:0.1em;
 }
 
-/*paginas con dos combos*/
+/*paginas varios elementos en la cabecera*/
 #ruta .ui-block-a, #horas .ui-block-a {width:60%!important}
 #ruta .ui-block-b, #horas .ui-block-b {width:40%!important}
+
+#mapaOcupados .ui-block-a {width:48%!important}
+#mapaOcupados .ui-block-b {width:26%!important}
+#mapaOcupados .ui-block-c {width:26%!important}
+
 .noinfo {
 	display: none;
 	padding: 1em;

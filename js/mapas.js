@@ -143,11 +143,11 @@ function createMaps() {
 	});
 }
 
-function addCaminosOcupados(mapa) {
-	let dateHoy = new Date();
-	let codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
-	let hoy = dias.find(d => d.fecha == formatDate(dateHoy));
-	let codFecha = (hoy != undefined) ? hoy.codigo_fecha : 0;
+function addCaminosOcupados(mapa, codFecha = 0, codJornada = 1) {
+	// let dateHoy = new Date();
+	// let codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
+	// let hoy = dias.find(d => d.fecha == formatDate(dateHoy));
+	// let codFecha = (hoy != undefined) ? hoy.codigo_fecha : 0;
 	let cqlOcupados = `JORN_CO_CODIGO='${codJornada}' AND FECH_CO_CODIGO='${codFecha}'`;
 	let lyCaminosOcupados = new M.layer.WMS({
 		url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
@@ -156,7 +156,7 @@ function addCaminosOcupados(mapa) {
 		transparent: true,
 		tiled: false
 	});
-
+	console.log(cqlOcupados);
 	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
 }
 //para controlar que sólo está añadida al mapa actual visualizado

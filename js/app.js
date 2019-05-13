@@ -290,6 +290,7 @@ function cargarDias() {
 				option.attr("selected", "selected");
 			}
 			$("#dropDiaDiario").append(option);
+			$("#dropDiaDiarioCamino").append(option.clone());
 		});
 		cargarDiario($("#dropDiaDiario").val());
 

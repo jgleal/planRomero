@@ -111,7 +111,7 @@
     <div data-role="header" data-position="fixed">
       <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
-      <h1>Rutas de Carretas</h1>
+      <h1>Rutas de Hermandades</h1>
       <div data-role="navbar">
         <ul>
 
@@ -143,7 +143,7 @@
     <div data-role="header" data-position="fixed">
       <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
-      <h3>Camino</h3>
+      <h3>Itinerario Hermandades</h3>
       <div data-role="navbar">
         <ul>
           <li>
@@ -168,7 +168,7 @@
     <div data-role="header" data-position="fixed">
       <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
-      <h3>Localización GPS</h3>
+      <h3>Localización en vivo</h3>
       <div data-role="navbar">
         <ul>
           <li>
@@ -285,6 +285,22 @@
       <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Caminos Ocupados</h3>
+      <div data-role="navbar">
+        <ul>
+          <li>
+            <select id="dropDiaDiarioCamino" name="dropDiaDiarioCamino" data-shadow="false" data-mini="true" data-corners="false">
+            </select>
+          </li>
+          <li>
+            <input type="radio" name="jornadaCamino" id="caminoManana" value="1" checked="checked"/>
+            <label for="caminoManana">Mañana</label>
+          </li>
+          <li>
+            <input type="radio" name="jornadaCamino" id="caminoTarde" value="2"/>
+            <label for="caminoTarde">Tarde</label>
+          </li>
+        </ul>
+      </div>
     </div>
     <div role="main" class="ui-content">
       <div id="mapOcupados" class="m-mapea-container"></div>
