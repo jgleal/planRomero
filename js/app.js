@@ -473,6 +473,16 @@ function centerGPS() {
 	}
 }
 
+function generarDocs() {
+	let pageDocs = $("#docs .ui-content")
+	docsPDF.forEach(doc => {
+		let domDoc = $("<a>").addClass("ui-btn ui-icon-arrow-d ui-btn-icon-right");
+		domDoc.attr('href', `javascript:openUrlExternal('${doc.url}')`);
+		domDoc.text(doc.nombre);
+		pageDocs.append(domDoc);
+	});
+}
+
 $(document).ready(function () {
 	if (window.isApp) {
 		document.addEventListener("deviceready", onDeviceReady, false);
@@ -500,4 +510,5 @@ function onDeviceReady() {
 	});
 	createMaps();
 	bindEvents();
+	generarDocs();
 }

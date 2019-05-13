@@ -26,8 +26,13 @@ const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se reali
 const urlCJI = 'http://www.juntadeandalucia.es/organismos/justiciaeinterior.html';
 const urlConsorcioHuelva= "http://www.cthu.es/";
 const urlConsorcioSevilla= "http://www.consorciotransportes-sevilla.com/";
-const urlPDF = "http://www.juntadeandalucia.es/justiciaeinterior/imgplan/InformaPlanRomero.pdf";
 const versionApp = "Versión 1.0.0";
+const docsPDF = [
+	{
+		nombre: "Tríptico",
+		url: "http://www.juntadeandalucia.es/justiciaeinterior/imgplan/InformaPlanRomero.pdf"
+	}
+];
 const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
 						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de Justicia e Interior</a>
 						<br>
