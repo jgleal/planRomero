@@ -35,6 +35,11 @@ function informacionHermandad(idHermandad) {
 			val = `<a href="#" onclick="javascript:openUrlExternal('tel:${val}');">${val}</a>`;
 		else if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(val)) //es email
 			val = `<a href="#" onclick="javascript:openUrlExternal('mailto:${val}');">${val}</a>`;
+		else if (val instanceof Array){
+			if (/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)$/.test(val.toString())) //son coordenadas
+				val = `<a href="#" onclick="javascript:goTo(${key}, ${val});">${val}</a>`;
+		}
+			
 
 		tbodyTabla.append($("<tr>")
 			.append($("<td>").html(key.replace("_", " ")))
@@ -45,6 +50,17 @@ function informacionHermandad(idHermandad) {
 
 function guardarFavorita(idHermandad) {
 	localStorage.setItem("hermandadFavorita", idHermandad);
+}
+
+function goTo(etiqueta, coordenadas){
+	console.log(etiqueta, coordenadas);
+	let hTopo = {
+		"topoX": coordenadas[0],
+		"topoY": coordenadas[1],
+		"topoNombre": etiqueta,
+		"topoHermandad": '' 
+	};
+	$.mobile.changePage("#toponimo", hTopo);
 }
 
 
@@ -500,7 +516,6 @@ function onDeviceReady() {
 	]).always(function () {
 		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
 		updateLastPos().always(function () {
-
 			window.setInterval(updateLastPos, updateGPS * 1000);
 		});
 		if (window.isApp) {
