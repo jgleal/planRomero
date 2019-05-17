@@ -78,7 +78,7 @@ function bindEvents() {
 	});
 	$("input[name='jornadaCamino']").on("change", function () {
 		addCaminosOcupados(mapajsOcupados, 
-			$("#dropDiarioCamino").val(),
+			$("#dropDiaDiarioCamino").val(),
 			$(this).val());
 	});
 	$("#dropPasos").on("change", function () {

@@ -144,10 +144,7 @@ function createMaps() {
 }
 
 function addCaminosOcupados(mapa, codFecha = 0, codJornada = 1) {
-	// let dateHoy = new Date();
-	// let codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
-	// let hoy = dias.find(d => d.fecha == formatDate(dateHoy));
-	// let codFecha = (hoy != undefined) ? hoy.codigo_fecha : 0;
+	mapa.removeLayers(mapa.getLayers({name: capaCaminosOcupados}));
 	let cqlOcupados = `JORN_CO_CODIGO='${codJornada}' AND FECH_CO_CODIGO='${codFecha}'`;
 	let lyCaminosOcupados = new M.layer.WMS({
 		url: urlWMSCaminosOcupados + '?cql_filter=' + encodeURI(cqlOcupados),
@@ -156,8 +153,7 @@ function addCaminosOcupados(mapa, codFecha = 0, codJornada = 1) {
 		transparent: true,
 		tiled: false
 	});
-	console.log(cqlOcupados);
-	mapa.removeLayers(lyCaminosOcupados).addLayers(lyCaminosOcupados);
+	mapa.addLayers(lyCaminosOcupados);	
 }
 //para controlar que sólo está añadida al mapa actual visualizado
 //ya que mapea no permite una capa en varios mapas

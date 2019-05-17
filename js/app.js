@@ -37,7 +37,7 @@ function informacionHermandad(idHermandad) {
 			val = `<a href="#" onclick="javascript:openUrlExternal('mailto:${val}');">${val}</a>`;
 		else if (val instanceof Array){
 			if (/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)$/.test(val.toString())) //son coordenadas
-				val = `<a href="#" onclick="javascript:goTo(${key}, ${val});">${val}</a>`;
+				val = `<a href="#" onclick="javascript:goTo('Casa ${h.nombre}', [${val}]);">[${val}]</a>`;
 		}
 			
 

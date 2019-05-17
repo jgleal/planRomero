@@ -1,6 +1,6 @@
 const apikey = "pl4n06";
 /************************************** SERVICIOS ****************************************/
-const entorno = "http://www.juntadeandalucia.es/justiciaeinterior/prom/rest/";
+const entorno = "https://ws198.juntadeandalucia.es/prom/rest/";
 const getHermandades = entorno + "hermandades/";
 const getDias = entorno + "fechas/";
 const getRutas = entorno + "ruta/";
@@ -42,9 +42,9 @@ const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${version
 						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioSevilla}');">Consorcio de transportes de Sevilla</a>`;
 
 const horaCambioJornada = 15;
-const urlWMSCaminosOcupados = 'http://www.juntadeandalucia.es/justiciaeinterior/IDE/PlanRomero/wms';
+const urlWMSCaminosOcupados = 'https://ws199.juntadeandalucia.es/PlanRomero/wms';
 const capaCaminosOcupados = 'PlanRomero:PR_125_CAM_OCUPADOS';
-const legendURL = "http://www.juntadeandalucia.es/justiciaeinterior/imgplan/LeyendaPRomero.png";
+const legendURL = "https://ws199.juntadeandalucia.es/imgplan/LeyendaPRomero.png";
 window.isApp = /^(?!HTTP)/.test(document.URL.toUpperCase()); //
 window.iOS = /IPAD|IPHONE|IPOD/.test(navigator.userAgent.toUpperCase());
 var formatDate = function (date, format) {
