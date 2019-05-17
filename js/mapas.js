@@ -107,14 +107,14 @@ function createMaps() {
 	mapajsRuta = M.map({
 		controls: ["location", "scale", "layerswitcher"],
 		container: "mapRuta",
-		wmcfiles: ["romero_mapa", "romero_satelite"],
+		wmcfiles: ["romero_mapa"],
 		layers: [lyRuta]
 	});
 
 	mapajsDiario = M.map({
 		controls: ["location", "scale", "layerswitcher"],
 		container: "mapDiario",
-		wmcfiles: ["romero_mapa", "romero_satelite"],
+		wmcfiles: ["romero_mapa"],
 		layers: [lyRutaDiario, lyPois]
 	});
 
@@ -122,7 +122,7 @@ function createMaps() {
 	mapajsTopo = M.map({
 		controls: ["location", "scale", "layerswitcher"],
 		container: "mapToponimo",
-		wmcfiles: ["romero_mapa", "romero_satelite"]
+		wmcfiles: ["romero_mapa"]
 	});
 	//TODO: ¿se podía ya cambiar estilo por defecto de la drawLayer?
 	mapajsTopo.getLayers({
@@ -132,13 +132,13 @@ function createMaps() {
 	mapajsOcupados = M.map({
 		controls: ["location", "scale", "layerswitcher"],
 		container: "mapOcupados",
-		wmcfiles: ["romero_mapa", "romero_satelite"]
+		wmcfiles: ["romero_mapa"]
 	});
 
 	mapajsGPS = M.map({
 		controls: ["location", "scale", "layerswitcher"],
 		container: "mapGPS",
-		wmcfiles: ["romero_mapa", "romero_satelite"],
+		wmcfiles: ["romero_mapa"],
 		layers: [lyGPS]
 	});
 }
