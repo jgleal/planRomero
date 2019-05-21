@@ -182,8 +182,15 @@ function cargarHermandadesRuta() {
 }
 
 function cargarPasos() {
+	const toponSelect = $("input[name='toponimos']:checked")
+						.map( (idx, elem) => elem.value ).get();
+	$("#dropPasos").empty();
 	return getInfo(getPasos).done(function (data) {
-		pasos = data.pasos;
+		let pasos = [];
+		toponSelect.forEach( topoVal => {
+			pasos.push(...data[topoVal]);
+		})
+		
 		$.each(pasos, function (i, paso) {
 			option = $("<option value=" + paso.codigo_toponimo + ">" + paso.nombre_toponimo + "</option>");
 			$("#dropPasos").append(option);

@@ -81,6 +81,16 @@ function bindEvents() {
 			$("#dropDiaDiarioCamino").val(),
 			$(this).val());
 	});
+	$("input[name='toponimos']").on("change", function (e) {
+		if($("input[name='toponimos']:checked").length == 0){
+			this.checked=true;
+		} else {
+			cargarPasos().done( () => {
+				$("#dropPasos").select(0).change();
+			});		
+		}
+		
+	});
 	$("#dropPasos").on("change", function () {
 		cargarDiasPaso($(this).val()).done(
 			function () {
