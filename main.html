@@ -5,7 +5,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="format-detection" content="telephone=no" />
   <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-  <meta http-equiv="Content-Security-Policy" content="default-src * gap:; img-src * data: blob: filesystem:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src * gap:; img-src * data: blob: filesystem:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
 
   <link href="lib/jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
   <link href="lib/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
@@ -41,9 +42,11 @@
   <div id="home" data-role="page">
     <div data-role="header" data-position="fixed">
       <h3>Plan Romero</h3>
-      <a href="javascript:showInfo()" class="ui-btn-right ui-btn ui-btn-inline ui-btn-icon-right ui-icon-info ui-btn-icon-notext"></a>
+      <a href="javascript:showInfo()"
+        class="ui-btn-right ui-btn ui-btn-inline ui-btn-icon-right ui-icon-info ui-btn-icon-notext"></a>
     </div>
     <div role="main" class="ui-content with_background">
+      <a class="ui-btn lista-avisos" href="#avisos">Consulta de información importante. Avisos</a>
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">Hermandades</li>
         <li data-icon="star">
@@ -65,12 +68,13 @@
       <a class="ui-btn ui-icon-info ui-btn-icon-right" href="#docs">Información General</a>
 
     </div>
-    
+
   </div>
   <!-- Page: hermandad  -->
   <div id="hermandad" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Hermandad</h3>
       <div data-role="navbar">
@@ -109,14 +113,16 @@
   <!-- Page: ruta  -->
   <div id="ruta" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h1>Rutas de Hermandades</h1>
       <div data-role="navbar">
         <ul>
 
           <li>
-            <select id="dropHermandadRuta" name="dropHermandadRuta" data-shadow="false" data-mini="true" data-corners="false">
+            <select id="dropHermandadRuta" name="dropHermandadRuta" data-shadow="false" data-mini="true"
+              data-corners="false">
             </select>
           </li>
           <li>
@@ -141,21 +147,23 @@
   <!-- Page: camino  -->
   <div id="camino" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Itinerario Hermandades</h3>
       <div data-role="navbar">
         <ul>
           <li>
-            <select id="dropHermandadCamino" name="dropHermandadCamino" data-shadow="false" data-mini="true" data-corners="false">
+            <select id="dropHermandadCamino" name="dropHermandadCamino" data-shadow="false" data-mini="true"
+              data-corners="false">
             </select>
           </li>
         </ul>
       </div>
     </div>
     <div role="main" class="ui-content with_background">
-      <div data-role="collapsibleset" data-collapsed-icon="plus" data-expanded-icon="minus" data-inset="true" data-corners="false"
-        id="listCamino">
+      <div data-role="collapsibleset" data-collapsed-icon="plus" data-expanded-icon="minus" data-inset="true"
+        data-corners="false" id="listCamino">
       </div>
       <div id="msjCamino" class="noinfo">
       </div>
@@ -166,13 +174,15 @@
   <!-- Page: gps  -->
   <div id="gps" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Localización en vivo</h3>
       <div data-role="navbar">
         <ul>
           <li>
-            <select id="dropHermandadGps" name="dropHermandadGps" data-shadow="false" data-mini="true" data-corners="false">
+            <select id="dropHermandadGps" name="dropHermandadGps" data-shadow="false" data-mini="true"
+              data-corners="false">
               <option value="0">Todas las Hermandades</option>
             </select>
           </li>
@@ -187,7 +197,8 @@
   <!-- Page: diario  -->
   <div id="diario" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Movimiento diario</h3>
       <div data-role="navbar">
@@ -212,9 +223,11 @@
   <!-- Page: mapadiario  -->
   <div id="mapaDiario" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#diario" class="ui-btn-back ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#diario"
+        class="ui-btn-back ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
-      <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h1>Movimiento diario</h1>
       <p class="subheader"></p>
@@ -229,7 +242,8 @@
   <!-- Page: horas  -->
   <div id="horas" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Pasos, sesteos y pernoctas</h3>
       <div data-role="navbar">
@@ -258,9 +272,11 @@
   <!-- Page: diario  -->
   <div id="toponimo" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#camino" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#camino"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
-      <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3></h3>
       <p class="subheader"></p>
@@ -282,21 +298,23 @@
   <!-- Page: caminos ocupados  -->
   <div id="mapaOcupados" data-role="page">
     <div data-role="header" data-position="fixed">
-      <a href="#home" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
+      <a href="#home"
+        class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Caminos Ocupados</h3>
       <div data-role="navbar">
         <ul>
           <li>
-            <select id="dropDiaDiarioCamino" name="dropDiaDiarioCamino" data-shadow="false" data-mini="true" data-corners="false">
+            <select id="dropDiaDiarioCamino" name="dropDiaDiarioCamino" data-shadow="false" data-mini="true"
+              data-corners="false">
             </select>
           </li>
           <li>
-            <input type="radio" name="jornadaCamino" id="caminoManana" value="1"/>
+            <input type="radio" name="jornadaCamino" id="caminoManana" value="1" />
             <label for="caminoManana">Mañana</label>
           </li>
           <li>
-            <input type="radio" name="jornadaCamino" id="caminoTarde" value="2"/>
+            <input type="radio" name="jornadaCamino" id="caminoTarde" value="2" />
             <label for="caminoTarde">Tarde</label>
           </li>
         </ul>
@@ -308,17 +326,34 @@
   </div>
   <!--fin caminos ocupados-->
   <!-- Page: docs  -->
-<div id="docs" data-role="page">
-  <div data-role="header" data-position="fixed">
-    <a href="#home" class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a> <!--ui-corner-all-->
-    <h3>Información general</h3>
-    <p class="subheader"></p>
+  <div id="docs" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home"
+        class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Información general</h3>
+      <p class="subheader"></p>
     </div>
     <div role="main" class="ui-content with_background">
-      
-    </div><!--content-->
-  </div>
 
+    </div>
+    <!--content-->
+  </div>
+  <!-- Page: avisos  -->
+  <div id="avisos" data-role="page">
+    <div data-role="header" data-position="fixed">
+      <a href="#home"
+        class="ui-btn-home ui-btn ui-btn-inline ui-mini ui-btn-icon-home ui-alt-icon ui-nodisc-icon ui-icon-home ui-btn-icon-notext"></a>
+      <!--ui-corner-all-->
+      <h3>Avisos</h3>
+      <p class="subheader"></p>
+    </div>
+    <div role="main" class="ui-content with_background">
+
+    </div>
+    <!--content-->
+
+  </div>
 </body>
 
 </html>

@@ -481,6 +481,51 @@ function updateLastPos(showLoading) {
 
 }
 
+function updateAvisos() {
+	filtro = {
+		tiempo: 0
+	};
+	return getInfo(getAvisos, filtro, false).done(function (data) {
+		let avisos = data.avisos.sort((a, b) => {
+			return a.prioridad - b.prioridad
+		});
+		let avisoHome = $("#home > div.ui-content > a.lista-avisos");
+		avisos.length > 0 ? avisoHome.css("display", "block") : avisoHome.hide();
+		let page = $("#avisos > div.ui-content");
+		page.empty();
+		for (let i = 0; i < avisos.length; i++) {
+			const aviso = avisos[i];
+			if (i === 0) avisoHome.addClass(getClassAviso(aviso.prioridad)); //el primero, ya que están ordenados por prioridad
+			let divAviso = $("<div/>", {
+				"class": "lista-avisos"
+			});
+			let titAviso = $("<h4/>");
+			let descAviso = $("<p/>");
+			// titAviso.text(new Date(aviso.timestamp).toLocaleString() + " - " +aviso.titulo);
+			titAviso.text(aviso.titulo);
+			descAviso.text(aviso.descripcion);
+			divAviso.append(titAviso).append(descAviso);
+			divAviso.addClass(getClassAviso(aviso.prioridad));
+			page.append(divAviso);
+		}
+	}).fail(function (e) {
+		console.log(e.error.mensaje);
+	});
+}
+
+function getClassAviso(prioridad) {
+	switch (prioridad) {
+		case 1:
+			return "severity-high";
+		case 2:
+			return "severity-mid";
+		case 3:
+			return "severity-low";
+		default:
+			return "";
+	}
+}
+
 function centerGPS() {
 	if (lyGPS.getFeatures().length > 0) {
 		mapajsGPS.setBbox(lyGPS.getFeaturesExtent());
@@ -517,6 +562,9 @@ function onDeviceReady() {
 		//JGL: oculto splash cuando se han cargado todos los datos básicos o ha dado error
 		updateLastPos().always(function () {
 			window.setInterval(updateLastPos, updateGPS * 1000);
+		});
+		updateAvisos().always(function () {
+			window.setInterval(updateAvisos, intervalAvisos * 1000);
 		});
 		if (window.isApp) {
 			setTimeout(function () {

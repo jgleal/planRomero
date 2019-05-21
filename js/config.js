@@ -11,10 +11,12 @@ const getFechasPaso = entorno + "fechas/paso/";
 const getHoras = entorno + "horario/";
 const getGPS = entorno + "gps/";
 const getColor = entorno + "color/"; //NO USADO
+const getAvisos = "https://ws199.juntadeandalucia.es/vcab/rest/" + "avisos/"
 /**/
 const bboxContext = {x:{min:96388,max:621889},y:{min:3959795,max:4299792}};
 const zoomToPoint = 12;
-const updateGPS = 150; //en segundos. 
+const updateGPS = 150; //en segundos.
+var intervalAvisos = 15; //en segundos
 const timeout = 30; //en segundos. Se usa para detectar si hay algún problema con los servicios no controlado
 const attrNotShow = ["the_geom", "geom", "geometry", "color", "sentido"];
 /*********************** MENSAJES DE ERROR NO CONTROLADO EN LOS SERVICIOS **********************/

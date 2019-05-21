@@ -115,7 +115,7 @@ div.with_background {
 }
 
 /***elimino estilos de seleccionado y activo ya que no interesan****/
-.ui-btn:hover,
+.ui-btn:not(.lista-avisos):hover,
 .ui-btn:active,
 .ui-focus{
     background-color: floralwhite !important;
@@ -203,3 +203,49 @@ div.m-panel.m-layerswitcher.opened{
 #iralli p{
   margin: 2px;
 }
+/* Avisos */
+#home .lista-avisos{
+  display: none
+}
+.lista-avisos {
+  border: 3px black dashed!important;
+  border-radius: 3px!important;
+  color: white!important;
+  padding: 5px!important;
+}
+
+#avisos .lista-avisos { 
+  margin: 1em!important;
+}
+.severity-high{
+  background-color: #f8d7da!important;
+  border-color: #eeb6bc!important;
+  color: #721c24!important;
+}
+.severity-mid{
+  background-color: #fff3cd!important;
+  border-color: #fae29c!important;
+  color: #856404!important
+}
+.severity-low{
+  background-color: #d4edda!important;
+  border-color: #a7e7b6!important;
+  color: #155724!important;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: #00853e;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+/*  */
+
