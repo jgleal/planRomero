@@ -35,11 +35,11 @@ function informacionHermandad(idHermandad) {
 			val = `<a href="#" onclick="javascript:openUrlExternal('tel:${val}');">${val}</a>`;
 		else if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(val)) //es email
 			val = `<a href="#" onclick="javascript:openUrlExternal('mailto:${val}');">${val}</a>`;
-		else if (val instanceof Array){
+		else if (val instanceof Array) {
 			if (/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)$/.test(val.toString())) //son coordenadas
 				val = `<a href="#" onclick="javascript:goTo('Casa ${h.nombre}', [${val}]);">[${val}]</a>`;
 		}
-			
+
 
 		tbodyTabla.append($("<tr>")
 			.append($("<td>").html(key.replace("_", " ")))
@@ -52,13 +52,13 @@ function guardarFavorita(idHermandad) {
 	localStorage.setItem("hermandadFavorita", idHermandad);
 }
 
-function goTo(etiqueta, coordenadas){
+function goTo(etiqueta, coordenadas) {
 	console.log(etiqueta, coordenadas);
 	let hTopo = {
 		"topoX": coordenadas[0],
 		"topoY": coordenadas[1],
 		"topoNombre": etiqueta,
-		"topoHermandad": '' 
+		"topoHermandad": ''
 	};
 	$.mobile.changePage("#toponimo", hTopo);
 }
@@ -183,14 +183,14 @@ function cargarHermandadesRuta() {
 
 function cargarPasos() {
 	const toponSelect = $("input[name='toponimos']:checked")
-						.map( (idx, elem) => elem.value ).get();
+		.map((idx, elem) => elem.value).get();
 	$("#dropPasos").empty();
 	return getInfo(getPasos).done(function (data) {
 		let pasos = [];
-		toponSelect.forEach( topoVal => {
+		toponSelect.forEach(topoVal => {
 			pasos.push(...data[topoVal]);
 		})
-		
+
 		$.each(pasos, function (i, paso) {
 			option = $("<option value=" + paso.codigo_toponimo + ">" + paso.nombre_toponimo + "</option>");
 			$("#dropPasos").append(option);
@@ -460,14 +460,14 @@ function updateLastPos(showLoading) {
 		let dataWithOrder = JSON.parse(JSON.stringify(data));
 		dataWithOrder.features = [];
 		hermandades.filter(h => h.gps).forEach(h => {
-			
+
 			//añado orden a las posiciones
 			hPositions = data.features.filter(f => f.properties.name == h.etiqueta_gps)
 				.sort((a, b) => new Date(b.properties.ts) - new Date(a.properties.ts));
 
 			//elimino duplicadas (misma hora)
 			hPositions = hPositions.filter((h, index, self) =>
-				index === self.findIndex( h2 => (
+				index === self.findIndex(h2 => (
 					h2.properties.ts === h.properties.ts
 				)));
 
@@ -555,6 +555,30 @@ function generarDocs() {
 $(document).ready(function () {
 	if (window.isApp) {
 		document.addEventListener("deviceready", onDeviceReady, false);
+		document.addEventListener('backbutton', function (evt) {
+			switch ($.mobile.activePage.attr('id')) {
+				case 'avisos':
+				case 'diario':
+				case 'horas':
+				case 'mapaOcupados':
+				case 'docs':
+				case 'hermandad':
+				case 'ruta':
+				case 'camino':
+				case 'gps':
+					$.mobile.changePage('#home');
+					break;
+				case 'toponimo':
+					backToponimo();
+					break;
+				case 'mapaDiario':
+					$.mobile.changePage('#diario');
+					break;
+				default:
+					navigator.app.exitApp();
+					break;
+			}
+		}, false);
 	} else {
 		onDeviceReady();
 	}
@@ -584,5 +608,12 @@ function onDeviceReady() {
 	generarDocs();
 	const dateHoy = new Date();
 	const codJornada = dateHoy.getHours() > horaCambioJornada ? 2 : 1;
-	$("input[name='jornadaCamino'][value="+ codJornada + "]").prop("checked", true);	
+	$("input[name='jornadaCamino'][value=" + codJornada + "]").prop("checked", true);
+}
+
+function backToponimo() {
+	if ($("#toponimo .subheader").text() !== '')
+		$.mobile.changePage('#camino');
+	else
+		$.mobile.changePage('#hermandad');
 }

@@ -1,5 +1,6 @@
 function bindEvents() {
 	$(document).on("pagechange", function (e, data) {
+		window.previousPage = data.prevPage[0].id;
 		if ($.type(data.toPage) == "object") {
 			seleccionarFavorita(localStorage.getItem("hermandadFavorita"));
 			switch (data.toPage[0].id) {
