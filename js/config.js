@@ -25,22 +25,32 @@ const noGPS = "Actualmente no existen posiciones GPS. Inténtelo más tarde";
 const errInesperado = "Ha ocurrido un error inesperado. Vuelva a ejecutar la aplicación";
 const errCode = [999];
 const errMsg = ["No hay posiciones GPS"];
-const urlCJI = 'http://www.juntadeandalucia.es/organismos/justiciaeinterior.html';
-const urlConsorcioHuelva= "http://www.cthu.es/";
-const urlConsorcioSevilla= "http://www.consorciotransportes-sevilla.com/";
-const versionApp = "Versión 1.0.0";
+const urlCJI = 'https://juntadeandalucia.es/organismos/presidenciaadministracionpublicaeinterior.html';
+const versionApp = "Versión 5.0.0";
 const docsPDF = [
 	{
 		nombre: "Tríptico",
-		url: "http://www.juntadeandalucia.es/justiciaeinterior/imgplan/InformaPlanRomero.pdf"
+		url: "https://ws199.juntadeandalucia.es/imgplan/InformaPlanRomero.pdf"
+	},
+	{
+		nombre: "Plano de la Aldea",
+		url: "https://ws199.juntadeandalucia.es/imgplan/PlanoAldeaRomero.pdf"
+	},
+	{
+		nombre: "Normas del parque",
+		url: "https://ws199.juntadeandalucia.es/imgplan/NormasParqueRomero.pdf"
+	},
+	{
+		nombre: "Consorcio transportes de Huelva",
+		url: "http://www.cthu.es/"
+	},
+	{
+		nombre: "Consorcio transportes de Sevilla",
+		url: "http://www.consorciotransportes-sevilla.com/"
 	}
 ];
 const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
-						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de Justicia e Interior</a>
-						<br>
-						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioHuelva}');">Consorcio de transportes de Huelva</a>
-						<br>
-						<a href="#" onclick="javascript:openUrlExternal('${urlConsorcioSevilla}');">Consorcio de transportes de Sevilla</a>`;
+						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de la Presidencia, Administración Pública e Interior</a>`;
 
 const horaCambioJornada = 15;
 const urlWMSCaminosOcupados = 'https://ws199.juntadeandalucia.es/PlanRomero/wms';

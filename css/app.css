@@ -48,10 +48,14 @@ a:visited    {color:#3f3f3e; font-weight: bold}
 #mapaOcupados .ui-block-b {width:26%!important}
 #mapaOcupados .ui-block-c {width:26%!important}
 
-#horas .col-4 .ui-block-a {width:25%!important}
+/* #horas .col-4 .ui-block-a {width:25%!important}
 #horas .col-4 .ui-block-b {width:25%!important}
 #horas .col-4 .ui-block-c {width:25%!important}
-#horas .col-4 .ui-block-d {width:25%!important}
+#horas .col-4 .ui-block-d {width:25%!important} */
+
+#horas .ui-radio {width:24%!important}
+#horas .ui-radio>.ui-btn {width:100%!important}
+
 
 .noinfo {
 	display: none;

@@ -246,25 +246,17 @@
         class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Pasos, sesteos y pernoctas</h3>
-      <div data-role="navbar">
-        <ul class="col-4">
-          <li>
-            <input type="radio" name="toponimos" value="paso" id="chkPasos" checked />
-            <label for="chkPasos">Pasos</label>
-          </li>
-          <li>
-            <input type="radio" name="toponimos" value="sesteo" id="chkSesteos" />
-            <label for="chkSesteos">Sesteos</label>
-          </li>
-          <li>
-            <input type="radio" name="toponimos" value="pernocta" id="chkPernoctas" />
-            <label for="chkPernoctas">Pernoctas</label>
-          </li>
-          <li>
-            <input type="radio" name="toponimos" value="Sesteos/Pernoctas" id="chkSesYPern" />
-            <label for="chkSesYPern">Sesteos/Pernoctas</label>
-          </li>
-        </ul>
+      <div data-role="navbar">     
+        <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+          <input type="radio" name="toponimos" value="paso" id="chkPasos" checked />
+          <label for="chkPasos">Pasos</label>
+          <input type="radio" name="toponimos" value="sesteo" id="chkSesteos" />
+          <label for="chkSesteos">Sesteos</label>
+          <input type="radio" name="toponimos" value="pernocta" id="chkPernoctas" />
+          <label for="chkPernoctas">Pernoctas</label>
+          <input type="radio" name="toponimos" value="Sesteos/Pernoctas" id="chkSesYPern" />
+          <label for="chkSesYPern">Sesteos/Pernoctas</label>
+        </div>
         <ul>
           <li>
             <select id="dropPasos" name="dropPasos" data-shadow="false" data-mini="true" data-corners="false">
@@ -277,12 +269,9 @@
         </ul>
       </div>
     </div>
-
     <div role="main" class="ui-content with_background">
-
       <ul data-role="listview" data-inset="true" data-corners="false" id="listHoras">
       </ul>
-
     </div>
     <!--content-->
   </div>

@@ -563,7 +563,7 @@ function centerGPS() {
 function generarDocs() {
 	let pageDocs = $("#docs .ui-content")
 	docsPDF.forEach(doc => {
-		let domDoc = $("<a>").addClass("ui-btn ui-icon-arrow-d ui-btn-icon-right");
+		let domDoc = $("<a>").addClass("ui-btn ui-icon-info ui-btn-icon-right");
 		domDoc.attr('href', `javascript:openUrlExternal('${doc.url}')`);
 		domDoc.text(doc.nombre);
 		pageDocs.append(domDoc);
