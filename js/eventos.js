@@ -83,17 +83,16 @@ function bindEvents() {
 			$(this).val());
 	});
 	$("input[name='toponimos']").on("change", function (e) {
-		if($("input[name='toponimos']:checked").length == 0){
-			this.checked=true;
-		} else {
-			cargarPasos().done( () => {
-				$("#dropPasos").select(0).change();
-			});		
-		}
+		
+		cargarPasos().done( () => {
+			$("#dropPasos").change();
+			$("#dropPasos").selectmenu("refresh");			
+		});		
 		
 	});
 	$("#dropPasos").on("change", function () {
-		cargarDiasPaso($(this).val()).done(
+		const tipoTopo = $("input[name='toponimos']:checked").val();
+		cargarDiasPaso($(this).val(), tipoTopo).done(
 			function () {
 				$("#dropDiasPaso").selectmenu("refresh");
 				cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(function () {
@@ -101,7 +100,7 @@ function bindEvents() {
 				});
 			});
 	});
-	$("#dropDiasPaso").on("change", function () {
+	$("#dropDiasPaso").on("change", function () {		
 		cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(
 			function () {
 				$("#listHoras").listview("refresh");

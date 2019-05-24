@@ -11,7 +11,7 @@ const getFechasPaso = entorno + "fechas/paso/";
 const getHoras = entorno + "horario/";
 const getGPS = entorno + "gps/";
 const getColor = entorno + "color/"; //NO USADO
-const getAvisos = "https://ws199.juntadeandalucia.es/vcab/rest/" + "avisos/"
+const getAvisos = entorno + "avisos/"
 /**/
 const bboxContext = {x:{min:96388,max:621889},y:{min:3959795,max:4299792}};
 const zoomToPoint = 12;
@@ -23,9 +23,8 @@ const attrNotShow = ["the_geom", "geom", "geometry", "color", "sentido"];
 const noGPS = "Actualmente no existen posiciones GPS. Inténtelo más tarde";
 /*const noPosicion = "No existe posición para la hermandad seleccionada";*/
 const errInesperado = "Ha ocurrido un error inesperado. Vuelva a ejecutar la aplicación";
-const errCode = [2,999];
-const errMsg = ["No es posible visualizar la ruta. El desplazamiento no se realiza en carreta",
-				"No hay posiciones GPS"];
+const errCode = [999];
+const errMsg = ["No hay posiciones GPS"];
 const urlCJI = 'http://www.juntadeandalucia.es/organismos/justiciaeinterior.html';
 const urlConsorcioHuelva= "http://www.cthu.es/";
 const urlConsorcioSevilla= "http://www.consorciotransportes-sevilla.com/";

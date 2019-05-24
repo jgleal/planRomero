@@ -182,20 +182,35 @@ function cargarHermandadesRuta() {
 }
 
 function cargarPasos() {
-	const toponSelect = $("input[name='toponimos']:checked")
-		.map((idx, elem) => elem.value).get();
+	const tipoSelect = $("input[name='toponimos']:checked").val();
+		
 	$("#dropPasos").empty();
-	return getInfo(getPasos).done(function (data) {
-		let pasos = [];
-		toponSelect.forEach(topoVal => {
-			pasos.push(...data[topoVal]);
-		})
+	return getInfo(getPasos, {
+		"tipo": tipoSelect
+	}).done(function (data) {
+		let pasos;
+		switch (tipoSelect) {
+			case 'paso':
+				pasos = data.pasos;				
+				break;
+			case 'sesteo':
+				pasos = data.sesteos;				
+				break;
+			case 'pernocta':
+				pasos = data.pernoctas;
+				break;
+			case 'Sesteo/Pernocta':		
+				pasos = data.sesteosYpernoctas;		
+				break;		
+			default:
+				break;
+		}		
 
 		$.each(pasos, function (i, paso) {
 			option = $("<option value=" + paso.codigo_toponimo + ">" + paso.nombre_toponimo + "</option>");
 			$("#dropPasos").append(option);
 		});
-		cargarDiasPaso($("#dropPasos").val()).done(function (data) {
+		cargarDiasPaso($("#dropPasos").val(), tipoSelect).done(function (data) {
 			cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val());
 		});
 	}).fail(function (e) {
@@ -276,11 +291,11 @@ function cargarDiario(idDia) {
 }
 
 function cargarHoras(idPaso, idDia) {
+	let listHoras = $("#listHoras");
 	return getInfo(getHoras, {
 		"codigo_toponimo": idPaso,
 		"codigo_fecha": idDia
 	}).done(function (data) {
-		let listHoras = $("#listHoras");
 		listHoras.empty();
 		$.each(data.hora_hermandad, function (i, horaPaso) {
 			let li = $("<li>" + horaPaso.nombre + "</li>");
@@ -288,12 +303,15 @@ function cargarHoras(idPaso, idDia) {
 			listHoras.append(li);
 		});
 	}).fail(function (e) {
+		listHoras.empty();
 		showError(e.error);
 	});
 }
 
-function cargarDiasPaso(idPaso) {
-	return getInfo(getFechasPaso + idPaso).done(function (data) {
+function cargarDiasPaso(idPaso, tipo) {
+	return getInfo(getFechasPaso + idPaso,{
+		"tipo": tipo.charAt(0).toUpperCase() + tipo.slice(1)
+	}).done(function (data) {
 		$("#dropDiasPaso").empty();
 		$.each(data.dias_semana_paso, function (i, dia) {
 			let option = $("<option value=" + dia.codigo_fecha + ">" + dia.dia_semana + "</option>");
