@@ -11,7 +11,13 @@ a:visited    {color:#3f3f3e; font-weight: bold}
 	margin-left: 2.5em;
 	margin-right: 2.5em;
 }
-.ui-btn{text-align: left}
+.ui-btn{  
+  text-align: left;  
+}
+.ui-controlgroup .ui-btn{
+  font-size: inherit!important;
+  padding: 0.5em!important
+}
 .ui-mini {font-size: 12px}
 
 /*iconos de botones más cuadrados*/
@@ -47,15 +53,6 @@ a:visited    {color:#3f3f3e; font-weight: bold}
 #mapaOcupados .ui-block-a {width:48%!important}
 #mapaOcupados .ui-block-b {width:26%!important}
 #mapaOcupados .ui-block-c {width:26%!important}
-
-/* #horas .col-4 .ui-block-a {width:25%!important}
-#horas .col-4 .ui-block-b {width:25%!important}
-#horas .col-4 .ui-block-c {width:25%!important}
-#horas .col-4 .ui-block-d {width:25%!important} */
-
-#horas .ui-radio {width:24%!important}
-#horas .ui-radio>.ui-btn {width:100%!important}
-
 
 .noinfo {
 	display: none;
@@ -114,6 +111,10 @@ div.with_background {
 .ui-btn-icon-bottom:after,
 .ui-btn-icon-notext:after {
   background-color: #c0b997;
+}
+.ui-btn-active{
+  background-color: #217845!important;
+  border-color: #057d42!important;
 }
 .m-dialog.info div.m-message{
   text-align: center;
@@ -257,4 +258,6 @@ div.m-panel.m-layerswitcher.opened{
   color: black;
 }
 /*  */
-
+.ui-controlgroup {
+  text-align: center!important;
+}

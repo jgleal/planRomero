@@ -21,9 +21,9 @@ function bindEvents() {
 						if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
 					establecerMapaGPSlayer(mapajsTopo);
-					let coordsGeo = transformar([data.options.topoX,data.options.topoY]);
-					let geolink = getGeoLink(coordsGeo,data.options.topoNombre);
-					$("#iralli a").attr("onclick",`javascript:openUrlExternal('${geolink}');`);
+					let coordsGeo = transformar([data.options.topoX, data.options.topoY]);
+					let geolink = getGeoLink(coordsGeo, data.options.topoNombre);
+					$("#iralli a").attr("onclick", `javascript:openUrlExternal('${geolink}');`);
 					pintarToponimo(data.options);
 					//mapajsTopo.refresh();
 					mapajsTopo.getMapImpl().updateSize();
@@ -46,13 +46,15 @@ function bindEvents() {
 					updateLastPos(false).done(function () {
 						if (lyGPS.getFeatures().length <= 0) showDialog(noGPS, 'ERROR', 'error');
 					});
-					addCaminosOcupados(mapajsOcupados, 
+					addCaminosOcupados(mapajsOcupados,
 						$("#dropDiaDiarioCamino").val(),
 						$("input[name='jornadaCamino']").val());
 					establecerMapaGPSlayer(mapajsOcupados);
 					//mapajsOcupados.refresh();
 					mapajsOcupados.getMapImpl().updateSize();
-					mapajsOcupados.getControls({name:'location'})[0].activate();
+					mapajsOcupados.getControls({
+						name: 'location'
+					})[0].activate();
 					break;
 				default:
 					break;
@@ -73,22 +75,22 @@ function bindEvents() {
 		});
 	});
 	$("#dropDiaDiarioCamino").on("change", function () {
-		addCaminosOcupados(mapajsOcupados, 
+		addCaminosOcupados(mapajsOcupados,
 			$(this).val(),
 			$("input[name='jornadaCamino']").val());
 	});
 	$("input[name='jornadaCamino']").on("change", function () {
-		addCaminosOcupados(mapajsOcupados, 
+		addCaminosOcupados(mapajsOcupados,
 			$("#dropDiaDiarioCamino").val(),
 			$(this).val());
 	});
 	$("input[name='toponimos']").on("change", function (e) {
-		
-		cargarPasos().done( () => {
-			$("#dropPasos").change();
-			$("#dropPasos").selectmenu("refresh");			
-		});		
-		
+		const tipoTopo = $("input[name='toponimos']:checked").val();
+		cargarPasos().done(function () {
+			//$("#dropPasos").selectmenu("refresh");
+			$("#dropPasos").change();			
+		});
+
 	});
 	$("#dropPasos").on("change", function () {
 		const tipoTopo = $("input[name='toponimos']:checked").val();
@@ -96,11 +98,14 @@ function bindEvents() {
 			function () {
 				$("#dropDiasPaso").selectmenu("refresh");
 				cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(function () {
-					$("#listHoras").listview("refresh");
+					setTimeout(() => {
+						$("#listHoras").listview("refresh");	
+					}, 50); //hay problemas al refrescar la lista si no
+					
 				});
 			});
 	});
-	$("#dropDiasPaso").on("change", function () {		
+	$("#dropDiasPaso").on("change", function () {
 		cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(
 			function () {
 				$("#listHoras").listview("refresh");
@@ -119,7 +124,7 @@ function bindEvents() {
 		if ($.mobile.activePage.attr('id') == 'gps')
 			updateLastPos(true).done(() => centerGPS());
 	});
-	
+
 	$("#tablaHermandad th").click(function () { //funcionalidad a toda la cabecera
 		$(".star.fa").toggleClass("fa-star fa-star-o");
 		let hSel = $("#dropHermandad").val();
@@ -129,22 +134,30 @@ function bindEvents() {
 			seleccionarFavorita(hSel);
 		} else if (hSel == hFav) { //desmarcando favorita
 			guardarFavorita(null);
-			seleccionarFavorita(null);			
+			seleccionarFavorita(null);
 		}
 		$("#dropDiaRuta").val($("#dropDiaRuta option:first").val()).change();
 	});
 	$("#descargaDoc").click(function () {
 		openUrlExternal(urlPDF);
-	});	
+	});
 
 	lyRuta.on(M.evt.LOAD, () => mapajsRuta.setBbox(lyRuta.getFeaturesExtent()));
 	//lyGPS.on(M.evt.LOAD, () => lyGPS.setFilter(filtroGPS));
-	mapajsGPS.on(M.evt.ADDED_WMS, () => mapajsGPS.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsRuta.on(M.evt.ADDED_WMS, () => mapajsRuta.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsDiario.on(M.evt.ADDED_WMS, () => mapajsDiario.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsOcupados.on(M.evt.ADDED_WMS, () => mapajsOcupados.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	mapajsTopo.on(M.evt.ADDED_WMS, () => mapajsTopo.getLayers({"name":"PlanRomero:PlanRomero"})[0].setLegendURL(legendURL));
-	
+	mapajsGPS.on(M.evt.ADDED_WMS, () => mapajsGPS.getLayers({
+		"name": "PlanRomero:PlanRomero"
+	})[0].setLegendURL(legendURL));
+	mapajsRuta.on(M.evt.ADDED_WMS, () => mapajsRuta.getLayers({
+		"name": "PlanRomero:PlanRomero"
+	})[0].setLegendURL(legendURL));
+	mapajsDiario.on(M.evt.ADDED_WMS, () => mapajsDiario.getLayers({
+		"name": "PlanRomero:PlanRomero"
+	})[0].setLegendURL(legendURL));
+	mapajsOcupados.on(M.evt.ADDED_WMS, () => mapajsOcupados.getLayers({
+		"name": "PlanRomero:PlanRomero"
+	})[0].setLegendURL(legendURL));
+	mapajsTopo.on(M.evt.ADDED_WMS, () => mapajsTopo.getLayers({
+		"name": "PlanRomero:PlanRomero"
+	})[0].setLegendURL(legendURL));
+
 }
-
-

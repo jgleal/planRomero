@@ -199,7 +199,7 @@ function cargarPasos() {
 			case 'pernocta':
 				pasos = data.pernoctas;
 				break;
-			case 'Sesteo/Pernocta':		
+			case 'sesteo/pernocta':		
 				pasos = data.sesteosYpernoctas;		
 				break;		
 			default:
@@ -309,8 +309,9 @@ function cargarHoras(idPaso, idDia) {
 }
 
 function cargarDiasPaso(idPaso, tipo) {
+	
 	return getInfo(getFechasPaso + idPaso,{
-		"tipo": tipo.charAt(0).toUpperCase() + tipo.slice(1)
+		"tipo": tipo
 	}).done(function (data) {
 		$("#dropDiasPaso").empty();
 		$.each(data.dias_semana_paso, function (i, dia) {

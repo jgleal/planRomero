@@ -246,17 +246,19 @@
         class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-btn-icon-left ui-alt-icon ui-nodisc-icon ui-icon-carat-l ui-btn-icon-notext"></a>
       <!--ui-corner-all-->
       <h3>Pasos, sesteos y pernoctas</h3>
-      <div data-role="navbar">     
-        <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-          <input type="radio" name="toponimos" value="paso" id="chkPasos" checked />
-          <label for="chkPasos">Pasos</label>
-          <input type="radio" name="toponimos" value="sesteo" id="chkSesteos" />
-          <label for="chkSesteos">Sesteos</label>
-          <input type="radio" name="toponimos" value="pernocta" id="chkPernoctas" />
-          <label for="chkPernoctas">Pernoctas</label>
-          <input type="radio" name="toponimos" value="Sesteos/Pernoctas" id="chkSesYPern" />
-          <label for="chkSesYPern">Sesteos/Pernoctas</label>
-        </div>
+      <div data-role="navbar">
+        <!-- <div id="tipoTopoGroup" data-role="fieldcontain"> -->
+          <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <input type="radio" name="toponimos" value="paso" id="chkPasos" checked />
+            <label for="chkPasos" data-mini="true">Pasos</label>
+            <input type="radio" name="toponimos" value="sesteo" id="chkSesteos" />
+            <label for="chkSesteos" data-mini="true">Sesteos</label>
+            <input type="radio" name="toponimos" value="pernocta" id="chkPernoctas" />
+            <label for="chkPernoctas" data-mini="true">Pernoctas</label>
+            <input type="radio" name="toponimos" value="sesteo/pernocta" id="chkSesYPern" />
+            <label for="chkSesYPern" data-mini="true">Sesteos / Pernoctas</label>
+          </div>
+        <!-- </div> -->
         <ul>
           <li>
             <select id="dropPasos" name="dropPasos" data-shadow="false" data-mini="true" data-corners="false">
