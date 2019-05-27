@@ -14,7 +14,7 @@ a:visited    {color:#3f3f3e; font-weight: bold}
 .ui-btn{  
   text-align: left;  
 }
-.ui-controlgroup .ui-btn{
+#horas .ui-controlgroup .ui-btn{
   font-size: inherit!important;
   padding: 0.5em!important
 }
@@ -50,9 +50,8 @@ a:visited    {color:#3f3f3e; font-weight: bold}
 #ruta .ui-block-a, #horas .ui-block-a {width:60%!important}
 #ruta .ui-block-b, #horas .ui-block-b {width:40%!important}
 
-#mapaOcupados .ui-block-a {width:48%!important}
-#mapaOcupados .ui-block-b {width:26%!important}
-#mapaOcupados .ui-block-c {width:26%!important}
+#mapaOcupados .ui-block-a {width:60%!important}
+#mapaOcupados .ui-block-b {width:40%!important}
 
 .noinfo {
 	display: none;
@@ -260,4 +259,9 @@ div.m-panel.m-layerswitcher.opened{
 /*  */
 .ui-controlgroup {
   text-align: center!important;
+  margin: 0!important
+}
+
+#horas .ui-controlgroup{
+  margin: 0.5em!important;
 }
