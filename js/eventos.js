@@ -48,7 +48,7 @@ function bindEvents() {
 					});
 					addCaminosOcupados(mapajsOcupados,
 						$("#dropDiaDiarioCamino").val(),
-						$("input[name='jornadaCamino']").val());
+						$("input[name='jornadaCamino']:checked").val());
 					establecerMapaGPSlayer(mapajsOcupados);
 					//mapajsOcupados.refresh();
 					mapajsOcupados.getMapImpl().updateSize();
@@ -77,7 +77,7 @@ function bindEvents() {
 	$("#dropDiaDiarioCamino").on("change", function () {
 		addCaminosOcupados(mapajsOcupados,
 			$(this).val(),
-			$("input[name='jornadaCamino']").val());
+			$("input[name='jornadaCamino']:checked").val());
 	});
 	$("input[name='jornadaCamino']").on("change", function () {
 		addCaminosOcupados(mapajsOcupados,

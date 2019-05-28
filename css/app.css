@@ -111,10 +111,7 @@ div.with_background {
 .ui-btn-icon-notext:after {
   background-color: #c0b997;
 }
-.ui-btn-active{
-  background-color: #217845!important;
-  border-color: #057d42!important;
-}
+
 .m-dialog.info div.m-message{
   text-align: center;
 }
@@ -129,6 +126,11 @@ div.with_background {
 .ui-focus{
     background-color: floralwhite !important;
     color: #000 !important; /*texto negro ya que cambia a blanco*/
+}
+.ui-radio .ui-btn-active, .ui-radio .ui-btn:active, .ui-radio .ui-btn-active:hover {
+  background-color: #217845!important;
+  border-color: #057d42!important;
+  color: #FFF!important;
 }
 .ui-li-count{
   border-style: none !important;
@@ -183,7 +185,7 @@ div.m-panel.m-layerswitcher.opened{
 }
 
 #kmruta{
-  top: 5.5em;
+  top: calc(env(safe-area-inset-top) + 5.5em);
   left: 1em;
   border-radius: 5px;
   font-weight: bold;
@@ -194,7 +196,7 @@ div.m-panel.m-layerswitcher.opened{
   z-index: 9998; /*encima del mapa pero debajo de los controles*/
 }
 #iralli{
-  top: 4em;
+  top: calc(env(safe-area-inset-top) + 4em);
   left: 0.2em;
   right: 0.2em;
   border-radius: 5px;
