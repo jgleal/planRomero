@@ -1,6 +1,6 @@
 const apikey = "pl4n06";
 /************************************** SERVICIOS ****************************************/
-const entorno = "https://ws198.juntadeandalucia.es/prom/rest/";
+const entorno = "https://ws199.juntadeandalucia.es/prom/rest/";
 const getHermandades = entorno + "hermandades/";
 const getDias = entorno + "fechas/";
 const getRutas = entorno + "ruta/";
