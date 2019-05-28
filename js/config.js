@@ -49,7 +49,7 @@ const docsPDF = [
 		url: "http://www.consorciotransportes-sevilla.com/"
 	}
 ];
-const htmlAcercade = `<img src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
+const htmlAcercade = `<img style="max-width:100%" src="img/logoJunta.png"/><br>Plan Romero<br>${versionApp}<br><br>Junta de Andalucía<br>
 						<a href="#" onclick="javascript:openUrlExternal('${urlCJI}');">Consejería de la Presidencia, Administración Pública e Interior</a>`;
 
 const horaCambioJornada = 15;
