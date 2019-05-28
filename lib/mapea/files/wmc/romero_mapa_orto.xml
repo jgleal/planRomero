@@ -135,7 +135,7 @@
 		<!--  ******   Base Cartografica CDAU ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>CDAU_base</Name>
 			<Title>Base Cartografica</Title>
@@ -164,7 +164,7 @@
 
 		<Layer hidden="0" queryable="1">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/cdau/wms?"/>
 			</Server>
 			<Name>CDAU_wms</Name>
 			<Title>Viales y Portales</Title>
