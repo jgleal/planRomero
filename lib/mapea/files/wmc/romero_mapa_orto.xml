@@ -52,7 +52,7 @@
 		<!--  ******   Sombreado SIOSE: capa base 2  ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="sombra_siose" version="1.1.1">
-				<OnlineResource xlink:href="https://www.ideandalucia.es/wms/sombras_siose?" xlink:type="simple"/>
+				<OnlineResource xlink:href="http://www.ideandalucia.es/wms/sombras_siose?" xlink:type="simple"/>
 			</Server>
 			<Name>sombras_siose</Name>
 			<Title>Fondo orográfico</Title>
@@ -107,7 +107,7 @@
 		<!--  ******   TOPORASTER 10    ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/toporaster10/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/toporaster10/wms?"/>
 			</Server>
 			<Name>toporaster10</Name>
 			<Title>toporaster10</Title>
