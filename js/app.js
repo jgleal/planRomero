@@ -211,7 +211,8 @@ function cargarPasos() {
 			$("#dropPasos").append(option);
 		});
 		cargarDiasPaso($("#dropPasos").val(), tipoSelect).done(function (data) {
-			cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val());
+			const tipoTopo = $("input[name='toponimos']:checked").val();
+			cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val(), tipoTopo);
 		});
 	}).fail(function (e) {
 		showError(e.error);
@@ -290,11 +291,12 @@ function cargarDiario(idDia) {
 	});
 }
 
-function cargarHoras(idPaso, idDia) {
+function cargarHoras(idPaso, idDia, tipoTopo) {
 	let listHoras = $("#listHoras");
 	return getInfo(getHoras, {
 		"codigo_toponimo": idPaso,
-		"codigo_fecha": idDia
+		"codigo_fecha": idDia,
+		"tipo": tipoTopo
 	}).done(function (data) {
 		listHoras.empty();
 		$.each(data.hora_hermandad, function (i, horaPaso) {

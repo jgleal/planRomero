@@ -2,8 +2,8 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
 		xmlns:gap   = "http://phonegap.com/ns/1.0"
 		id          = "es.juntadeandalucia.mapea.planromero"
-		versionCode = "500"
-		version     = "5.0.0" >
+		versionCode = "503"
+		version     = "5.0.3" >
 
 	<name>Plan Romero</name>
 	<description>

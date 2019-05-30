@@ -97,7 +97,7 @@ function bindEvents() {
 		cargarDiasPaso($(this).val(), tipoTopo).done(
 			function () {
 				$("#dropDiasPaso").selectmenu("refresh");
-				cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(function () {
+				cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val(), tipoTopo).done(function () {
 					setTimeout(() => {
 						$("#listHoras").listview("refresh");	
 					}, 50); //hay problemas al refrescar la lista si no
@@ -106,7 +106,8 @@ function bindEvents() {
 			});
 	});
 	$("#dropDiasPaso").on("change", function () {
-		cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val()).done(
+		const tipoTopo = $("input[name='toponimos']:checked").val();
+		cargarHoras($("#dropPasos").val(), $("#dropDiasPaso").val(), tipoTopo).done(
 			function () {
 				$("#listHoras").listview("refresh");
 			});
