@@ -3,8 +3,12 @@
 		xmlns:gap   = "http://phonegap.com/ns/1.0"
 		id          = "es.juntadeandalucia.mapea.planromero"
 		versionCode = "503"
+	    CFBundleVersion = "5.0.3"
 		version     = "5.0.3" >
-
+	<!-- CFBundleVersion not working -->
+	<!--<edit-config target="CFBundleVersionString" file="*-Info.plist" mode="overwrite">  
+    		<string>5.0.1</string>  
+ 	 </edit-config>-->
 	<name>Plan Romero</name>
 	<description>
 		Plan Romero
@@ -75,7 +79,10 @@
 			<false/>
 		</edit-config>
 		<edit-config target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
-			<string>Se necesita acceso a la ubicación del dispositivo</string>
+			<string>Se necesita acceso a la ubicación del dispositivo para establecer la posición respecto a las carretas de las hermandades y mostrarla en el mapa</string>
+		</edit-config>
+	        <edit-config target="NSLocationAlwaysUsageDescription" file="*-Info.plist" mode="merge">
+			<string>Se necesita acceso a la ubicación del dispositivo para establecer la posición respecto a las carretas de las hermandades y mostrarla en el mapa</string>
 		</edit-config>
         <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
         <icon src="resources/ios/icon/icon@2x.png" width="114" height="114"/>
