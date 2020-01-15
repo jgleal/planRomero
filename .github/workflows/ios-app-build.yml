@@ -23,13 +23,10 @@ jobs:
           cordova platform add ios
           cordova prepare ios
     - name: Upload xcode project
-      run: |
-          cd platforms/ios
-    - name: Upload xcode project
       uses: actions/upload-artifact@v1
       with:
         name: xcodeproject
-        path: platforms/ios/              
+        path: planromero/platforms/ios/              
 #    - name: Upload IPA
 #      uses: actions/upload-artifact@v1
 #      with:
