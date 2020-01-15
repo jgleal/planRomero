@@ -14,9 +14,8 @@ jobs:
     - name: Create project
       run: |
         cordova create planromero
-        cp -rf config.xml index.html main.html planromero/
-        cp -rf resources planromero/
-        cp -rf css fonts img js lib planromero/www/
+        cp -rf config.xml resources planromero/
+        cp -rf css fonts img js lib index.html main.html planromero/www/
     - name: Generate xcode project
       run: |
           cd planromero
@@ -26,7 +25,9 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: xcodeproject
-        path: planromero/platforms/ios/              
+        path: planromero/platforms/ios/
+    - name: Build app
+      run: echo "sing and build"
 #    - name: Upload IPA
 #      uses: actions/upload-artifact@v1
 #      with:
