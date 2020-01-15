@@ -9,10 +9,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Generate xcode project
+    - name: Install cordova
       run: npm install -g cordova
+    - name: Create project
+      run: |
+        cordova create planromero
+        cp -rf config.xml index.html main.html planromero/
+        cp -rf resources planromero/
+        cp -rf css fonts img js lib planromero/www/
     - name: Generate xcode project
       run: |
+          cd planromero
           cordova platform add ios
           cordova prepare ios
     - name: Upload xcode project
