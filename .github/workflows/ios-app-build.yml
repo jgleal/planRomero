@@ -30,22 +30,22 @@ jobs:
             cd planromero
             cordova platform add ios
             cordova prepare ios
-      - name: Upload xcode project
-        uses: actions/upload-artifact@v1
-        with:
-          name: xcodeproject
-          path: planromero/platforms/ios/
+#      - name: Upload xcode project
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: xcodeproject
+#          path: planromero/platforms/ios/
       - name: Build app
         run: |
           cd planromero/platforms/ios && xcodebuild archive \
-            -workspace "Plan Romero".xcworkspace \
+            -workspace "Plan Romero.xcworkspace" \
             -scheme "Plan Romero" \
             -sdk iphoneos13.2 \
             -configuration Release \
             -archivePath $PWD/build/planRomero.xcarchive \
             IPHONEOS_DEPLOYMENT_TARGET=9.0
             PROVISIONING_PROFILE="1aabf9a5-1ea1-496e-a022-16ccbe02755a" \
-            CODE_SIGN_IDENTITY="iPhone Distribution: JdA"
+            CODE_SIGN_IDENTITY="iPhone Distribution"
   #    - name: Upload IPA
   #      uses: actions/upload-artifact@v1
   #      with:
