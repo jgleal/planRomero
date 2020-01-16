@@ -48,9 +48,15 @@ jobs:
             CODE_SIGN_IDENTITY="iPhone Distribution" \
             PROVISIONING_PROFILE="1aabf9a5-1ea1-496e-a022-16ccbe02755a" \
             CODE_SIGN_STYLE="Manual"
-  
-  #    - name: Upload IPA
-  #      uses: actions/upload-artifact@v1
-  #      with:
-  #        name: app
-  #        path: platforms/ios/build/emulator/Ionic\ Conference\ App.app
+      - name: Export IPA
+        run: |
+          cd planromero/platforms/ios && xcodebuild \
+            -exportArchive \
+            -archivePath $PWD/build/appname.xcarchive \
+            -exportOptionsPlist $PWD/ci.plist \
+            -exportPath $PWD/build  
+      - name: Upload IPA
+        uses: actions/upload-artifact@v1
+        with:
+          name: PlanRomero
+          path: "platforms/ios/build/emulator/Plan Romero.ipa"
