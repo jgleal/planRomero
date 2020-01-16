@@ -55,11 +55,10 @@ jobs:
           path: planromero/platforms/ios/
       - name: Export IPA
         run: |
-          cp config/ios/ExportOptions.plist planromero/platforms/ios/
-          cd planromero/platforms/ios && xcodebuild \
+            cd planromero/platforms/ios && xcodebuild \
             -exportArchive \
             -archivePath $PWD/build/planRomero.xcarchive \
-            -exportOptionsPlist ExportOptions.plist \            
+            -exportOptionsPlist $PWD/build/planRomero.xcarchive/info.plist \            
             -exportPath $PWD/build 
       - name: Upload IPA
         uses: actions/upload-artifact@v1
