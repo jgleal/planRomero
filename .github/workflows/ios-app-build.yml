@@ -48,6 +48,11 @@ jobs:
             CODE_SIGN_IDENTITY="iPhone Distribution" \
             PROVISIONING_PROFILE="1aabf9a5-1ea1-496e-a022-16ccbe02755a" \
             CODE_SIGN_STYLE="Manual"
+      - name: Upload ios
+        uses: actions/upload-artifact@v1
+        with:
+          name: ios platform
+          path: planromero/platforms/ios/
       - name: Export IPA
         run: |
           cd planromero/platforms/ios && xcodebuild \
