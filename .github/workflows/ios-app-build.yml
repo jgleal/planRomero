@@ -45,7 +45,7 @@ jobs:
             -archivePath $PWD/build/planRomero.xcarchive \
             IPHONEOS_DEPLOYMENT_TARGET=9.0 \
             DEVELOPMENT_TEAM=2P43RZUB7Q \
-            CODE_SIGN_IDENTITY="iPhone Developer" \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
             PROVISIONING_PROFILE="1aabf9a5-1ea1-496e-a022-16ccbe02755a" 
   #    - name: Upload IPA
   #      uses: actions/upload-artifact@v1
