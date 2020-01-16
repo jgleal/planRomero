@@ -52,9 +52,9 @@ jobs:
         run: |
           cd planromero/platforms/ios && xcodebuild \
             -exportArchive \
-            -archivePath $PWD/build/planRomero.xcarchive \
-            -exportOptionsPlist $PWD/ci.plist \
+            -archivePath $PWD/build/planRomero.xcarchive \            
             -exportPath $PWD/build  
+#-exportOptionsPlist $PWD/ci.plist \
       - name: Upload IPA
         uses: actions/upload-artifact@v1
         with:
