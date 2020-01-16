@@ -39,13 +39,13 @@ jobs:
         run: |
           cd planromero/platforms/ios && xcodebuild archive \
             -workspace "Plan Romero".xcworkspace \
-            -scheme appname \
+            -scheme "Plan Romero" \
             -sdk iphoneos13.2 \
             -configuration Release \
             -archivePath $PWD/build/planRomero.xcarchive \
             IPHONEOS_DEPLOYMENT_TARGET=9.0
             PROVISIONING_PROFILE="planRomero" \
-            CODE_SIGN_IDENTITY="iPhone Distribution: Some Company (T343ff)"
+            CODE_SIGN_IDENTITY="iPhone Distribution: JdA"
   #    - name: Upload IPA
   #      uses: actions/upload-artifact@v1
   #      with:
