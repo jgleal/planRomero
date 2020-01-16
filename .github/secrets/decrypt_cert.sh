@@ -5,7 +5,7 @@ gpg --quiet --batch --yes --decrypt --passphrase="$IOS_CERTIFICATE_ENCRYPT" --ou
 
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
-cp ./.github/secrets/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/PlanRomero.mobileprovision
+cp ./.github/secrets/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/1aabf9a5-1ea1-496e-a022-16ccbe02755a.mobileprovision
 
 
 security create-keychain -p "" build.keychain
