@@ -8,28 +8,37 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Install cordova
-      run: npm install -g cordova
-    - name: Create project
-      run: |
-        cordova create planromero
-        cp -rf config.xml resources planromero/
-        cp -rf css fonts img js lib index.html main.html planromero/www/
-    - name: Generate xcode project
-      run: |
-          cd planromero
-          cordova platform add ios
-          cordova prepare ios
-    - name: Upload xcode project
-      uses: actions/upload-artifact@v1
-      with:
-        name: xcodeproject
-        path: planromero/platforms/ios/
-    - name: Build app
-      run: echo "sing and build"
-#    - name: Upload IPA
-#      uses: actions/upload-artifact@v1
-#      with:
-#        name: app
-#        path: platforms/ios/build/emulator/Ionic\ Conference\ App.app
+      - uses: actions/checkout@v1
+      - name: Install gpg
+        run: brew install gnupg #open issue to install by default on macos image
+      - name: Switch XCode Version
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Setup cert
+        run: ./.github/secrets/decrypt_cert.sh
+        env:
+            IOS_CERTIFICATE_ENCRYPT: ${{ secrets.IOS_CERTIFICATE_ENCRYPT }}
+            IOS_CERTIFICATE_PASS: ${{ secrets.IOS_CERTIFICATE_PASS }}
+      - name: Install cordova
+        run: npm install -g cordova
+      - name: Create project
+        run: |
+          cordova create planromero
+          cp -rf config.xml resources planromero/
+          cp -rf css fonts img js lib index.html main.html planromero/www/
+      - name: Generate xcode project
+        run: |
+            cd planromero
+            cordova platform add ios
+            cordova prepare ios
+      - name: Upload xcode project
+        uses: actions/upload-artifact@v1
+        with:
+          name: xcodeproject
+          path: planromero/platforms/ios/
+      - name: Build app
+        run: echo "sing and build"
+  #    - name: Upload IPA
+  #      uses: actions/upload-artifact@v1
+  #      with:
+  #        name: app
+  #        path: platforms/ios/build/emulator/Ionic\ Conference\ App.app
