@@ -44,7 +44,7 @@ jobs:
             -configuration Release \
             -archivePath $PWD/build/planRomero.xcarchive \
             IPHONEOS_DEPLOYMENT_TARGET=9.0
-            PROVISIONING_PROFILE="planRomero" \
+            PROVISIONING_PROFILE="1aabf9a5-1ea1-496e-a022-16ccbe02755a" \
             CODE_SIGN_IDENTITY="iPhone Distribution: JdA"
   #    - name: Upload IPA
   #      uses: actions/upload-artifact@v1
