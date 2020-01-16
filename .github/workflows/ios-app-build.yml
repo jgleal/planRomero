@@ -60,8 +60,7 @@ jobs:
             -exportArchive \
             -archivePath $PWD/build/planRomero.xcarchive \
             -exportOptionsPlist ExportOptions.plist \            
-            -exportPath $PWD/build  
-#
+            -exportPath $PWD/build 
       - name: Upload IPA
         uses: actions/upload-artifact@v1
         with:
