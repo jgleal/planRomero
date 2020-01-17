@@ -50,11 +50,12 @@ jobs:
             CODE_SIGN_STYLE="Manual"
       - name: Export IPA
         run: |
+            cp ./.github/config/ios/ExportOptions.plist planromero/platforms/ios/
             cd planromero/platforms/ios && xcodebuild \
             -exportArchive \
             -exportPath $PWD/build \
             -archivePath $PWD/build/planRomero.xcarchive \
-            -exportOptionsPlist /.github/config/ios/ExportOptions.plist
+            -exportOptionsPlist $PWD/ExportOptions.plist
       - name: Upload ios
         uses: actions/upload-artifact@v1
         if: failure()
