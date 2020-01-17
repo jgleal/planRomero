@@ -54,7 +54,7 @@ jobs:
             -exportArchive \
             -exportPath $PWD/build \
             -archivePath $PWD/build/planRomero.xcarchive \
-            -exportOptionsPlist .github/config/ios/ExportOptions.plist
+            -exportOptionsPlist /.github/config/ios/ExportOptions.plist
       - name: Upload ios
         uses: actions/upload-artifact@v1
         if: failure()
